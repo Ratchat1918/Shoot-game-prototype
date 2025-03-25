@@ -52,7 +52,7 @@ function moveBlockUp() {
     if (blockY <= 0) {
         blockY = 0;
     }
-    context.fillRect(blockX, blockY, 50,50);
+    context.drawImage(playerImg, blockX, blockY, 50,50);
 };
 function moveBlockDown(){
     console.log(blockX,blockY);
@@ -109,9 +109,7 @@ function moveDioganalyLeftDown() {
 let bulletX = blockX + 60;
 let bulletY = blockY + 25;
 
-function shootBullet(){
 
-};
 
 
 function createEnemies(){
@@ -189,4 +187,3 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key];
 });
-
