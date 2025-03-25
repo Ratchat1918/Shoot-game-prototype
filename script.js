@@ -41,7 +41,7 @@ function moveBlockDown(){
     console.log(blockX,blockY);
     context.clearRect(blockX,blockY,50,50);
     blockY+=block_dy;
-    let borderDown=canvas.heght-100;
+    let borderDown=canvas.height-100;
     if(blockY>=borderDown){
         blockY=borderDown;
     }
@@ -85,8 +85,8 @@ function moveDioganalyLeftDown(){
     context.fillRect(blockX,blockY,50,50);
 };
 
-function shootBullet(){
-
+function shootBullet() {
+    
 };
 
 
