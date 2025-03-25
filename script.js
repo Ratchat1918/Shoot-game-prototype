@@ -150,8 +150,8 @@ function drawBullets() {
 };
 
 
-let dx=2;
-let dy=2;
+let dx=3;
+let dy=3;
 let enemyInfoList=[
     {x:0, y:window.innerHeight / 2 - 50},
     {x:window.innerWidth-50, y:window.innerHeight / 2 - 50},
@@ -183,6 +183,18 @@ function createEnemies() {
             break;
     }
     requestAnimationFrame(createEnemies);
+    if(enemyInfoList[0].x>=window.innerHeight){
+        enemyInfoList[0].x=0;
+    }
+    if(enemyInfoList[1].x<=0){
+        enemyInfoList[1].x=window.innerHeight / 2 - 50;
+    }
+    if(enemyInfoList[2].y<=0){
+        enemyInfoList[2].y=window.innerHeight - 100;
+    }
+    if(enemyInfoList[3].y>=window.innerHeight-100){
+        enemyInfoList[3].y=0;
+    }
 };
 createEnemies();
 
