@@ -2,7 +2,6 @@ var canvas = document.querySelector("canvas");
 var context = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-console.log(canvas.width, canvas.height);
 
 let blockX = window.innerWidth / 2 - 25;
 let blockY = window.innerHeight / 2 - 25;
@@ -25,48 +24,44 @@ playerImg.onload = function() {
 };
 
 function moveBlockRight() {
-    console.log(blockX, blockY);
     context.clearRect(blockX, blockY, 50, 50);
     blockX += block_dx;
     let borderRight = canvas.width - 50;
     if (blockX >= borderRight) {
         blockX = borderRight;
     }
-    context.drawImage(playerImg, blockX, blockY, 50, 50);
+    context.drawImage(playerImgRight, blockX, blockY, 50, 50);
 }
 
 function moveBlockLeft() {
-    console.log(blockX, blockY);
     context.clearRect(blockX, blockY, 50, 50);
     blockX -= block_dx;
     if (blockX <= 0) {
         blockX = 0;
     }
-    context.drawImage(playerImg, blockX, blockY, 50, 50);
+    context.drawImage(playerImgLeft, blockX, blockY, 50, 50);
 }
 
 function moveBlockUp() {
-    console.log(blockX, blockY);
     context.clearRect(blockX, blockY, 50, 50);
     blockY -= block_dy;
     if (blockY <= 0) {
         blockY = 0;
     }
-    context.fillRect(blockX, blockY, 50,50);
-};
-function moveBlockDown(){
-    console.log(blockX,blockY);
-    context.clearRect(blockX,blockY,50,50);
-    blockY+=block_dy;
-    let borderDown=canvas.heght-100;
-    if(blockY>=borderDown){
-        blockY=borderDown;
-    }
     context.drawImage(playerImg, blockX, blockY, 50, 50);
 }
 
+function moveBlockDown() {
+    context.clearRect(blockX, blockY, 50, 50);
+    blockY += block_dy;
+    let borderDown = canvas.height - 100;
+    if (blockY >= borderDown) {
+        blockY = borderDown;
+    }
+    context.drawImage(playerImgDown, blockX, blockY, 50, 50);
+}
+
 function moveDioganalyRightUp() {
-    console.log(blockX, blockY);
     context.clearRect(blockX, blockY, 50, 50);
     blockX += block_dx;
     blockY -= block_dy;
@@ -79,7 +74,6 @@ function moveDioganalyRightUp() {
 }
 
 function moveDioganalyLeftUp() {
-    console.log(blockX, blockY);
     context.clearRect(blockX, blockY, 50, 50);
     blockY -= block_dy;
     blockX -= block_dx;
@@ -91,7 +85,6 @@ function moveDioganalyLeftUp() {
 }
 
 function moveDioganalyRightDown() {
-    console.log(blockX, blockY);
     context.clearRect(blockX, blockY, 50, 50);
     blockY += block_dy;
     blockX += block_dx;
@@ -99,75 +92,137 @@ function moveDioganalyRightDown() {
 }
 
 function moveDioganalyLeftDown() {
-    console.log(blockX, blockY);
     context.clearRect(blockX, blockY, 50, 50);
     blockY += block_dy;
     blockX -= block_dx;
     context.drawImage(playerImg, blockX, blockY, 50, 50);
 }
 
-let bulletX = blockX + 60;
-let bulletY = blockY + 25;
+let bulletSize = 30;
+let bulletSpeed = 20;
+let bullets = [];
 
-function shootBullet(){
+function createBullet(x, y, direction) {
+    bullets.push({ x: x, y: y, direction: direction});
+}
 
-};
+function refreshBullets() {
+    for (var i = 0; i < bullets.length; i++) {
+        var bullet = bullets[i];
 
+        if (bullet.direction === "up") {
+            bullet.y -= bulletSpeed;
+        } else if (bullet.direction === "down") {
+            bullet.y += bulletSpeed;
+        } else if (bullet.direction === "left") {
+            bullet.x -= bulletSpeed;
+        } else if (bullet.direction === "right") {
+            bullet.x += bulletSpeed;
+        }
 
-function createEnemies(){
-    console.log('testi');
-    spawnSide=Math.floor(Math.random() * 4) + 1;
-    console.log(spawnSide);
-    switch (spawnSide) {
-        case 1: // left side spawn
-            let enemyLeftX = 0;
-            let enemyLeftY = window.innerHeight / 2 - 50;
-            context.fillRect(enemyLeftX, enemyLeftY, 50, 100);
-            for (let x = 0; x < window.innerWidth; x + 10) {
-                context.clearRect(enemyLeftX, enemyLeftY, 50, 100);
-                enemyLeftX += 10;
-                context.fillRect(enemyLeftX, enemyLeftY, 50, 100);
+        /*for (var j = 0; j < viholliset.length; j++) {
+            var vihollinen = viholliset[j];
+            if (tarkistaTörmäys(ammus, vihollinen)) {
+                viholliset.splice(j, 1);
+                ammukset.splice(i, 1);
+                i--;
+                break;
             }
-            break;
-        case 2: // right side spawn
-            context.fillRect(window.innerWidth - 50, window.innerHeight / 2 - 50, 50, 100);
-            break;
-        case 3: // bottom spawn
-            context.fillRect(window.innerWidth / 2, innerHeight - 100, 50, 100);
-            break;
-        case 4: // top spawn
-            context.fillRect(window.innerWidth / 2, 0, 50, 100);
-            break;
+        }*/
+
+        if (bullet.x < 0 || 
+            bullet.x > canvas.width || 
+            bullet.y < 0 || 
+            bullet.y > canvas.height
+        ) {
+            bullets.splice(i, 1);
+            i--;
+        }
+    }
+}
+
+function drawBullets() {
+    context.fillStyle = "red";
+    for (var i = 0; i < bullets.length; i++) {
+        var bullet = bullets[i];
+        context.fillRect(bullet.x, bullet.y, bulletSize, bulletSize);
     }
 };
+
+
+let dx=2;
+let dy=2;
+let enemyInfoList=[
+    {x:0, y:window.innerHeight / 2 - 50},
+    {x:window.innerWidth-50, y:window.innerHeight / 2 - 50},
+    {x:window.innerWidth / 2, y:innerHeight - 100},
+    {x:window.innerWidth / 2, y:0}
+]
+function createEnemies() {
+    spawnSide = Math.floor(Math.random() * 4) + 1;
+    switch (spawnSide) {
+        case 1: // left side spawn
+            context.clearRect(enemyInfoList[0].x, enemyInfoList[0].y, 50, 100);
+            enemyInfoList[0].x+=dx;
+            context.fillRect(enemyInfoList[0].x, enemyInfoList[0].y, 50, 100);
+            break;
+        case 2: // right side spawn
+            context.clearRect(enemyInfoList[1].x, enemyInfoList[1].y, 50, 100);
+            enemyInfoList[1].x-=dx;
+            context.fillRect(enemyInfoList[1].x, enemyInfoList[1].y, 50, 100);
+            break;
+        case 3: // bottom spawn
+            context.clearRect(enemyInfoList[2].x, enemyInfoList[2].y, 50, 100);
+            enemyInfoList[2].y-=dy;
+            context.fillRect(enemyInfoList[2].x, enemyInfoList[2].y, 50, 100);
+            break;
+        case 4: // top spawn
+            context.clearRect(enemyInfoList[3].x, enemyInfoList[3].y, 50, 100);
+            enemyInfoList[3].y+=dy;
+            context.fillRect(enemyInfoList[3].x, enemyInfoList[3].y, 50, 100);
+            break;
+    }
+    requestAnimationFrame(createEnemies);
+};
+createEnemies();
 
 document.addEventListener("keydown", function (keyInput) {
     switch (keyInput.code) {
         case 'KeyD':
-            bulletX = blockX + 60;
-            bulletY = blockY + 25;
             moveBlockRight();
             break;
         case 'KeyA':
-            bulletX = blockX + 60;
-            bulletY = blockY + 25;
             moveBlockLeft();
             break;
         case 'KeyW':
-            bulletX = blockX + 60;
-            bulletY = blockY + 25;
             moveBlockUp();
             break;
         case 'KeyS':
-            bulletX = blockX + 60;
-            bulletY = blockY + 25;
             moveBlockDown();
             break;
-        case "KeyY":
-            shootBullet();
+        case "ArrowUp":
+            createBullet(blockX + 50 / 2 - bulletSize / 2, blockY,"up");
             break;
-        case "KeyO":
-            createEnemies();
+        case "ArrowDown":
+            createBullet(
+                blockX + 50 / 2 - bulletSize / 2,
+                blockY + 50,
+                "down"
+                );
+            break;
+        case "ArrowLeft":
+            createBullet(
+                blockX, 
+                blockY + 50 / 2 - bulletSize / 2,
+                "left"
+            );
+            break;
+        case "ArrowRight":
+            createBullet(
+                blockX + 50,
+                blockY + 50 / 2 - bulletSize / 2,
+                "right"
+            );
             break;
     }
 });
