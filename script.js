@@ -48,19 +48,6 @@ function moveBlockUp() {
     if (blockY <= 0) {
         blockY = 0;
     }
-<<<<<<< HEAD
-    context.drawImage(playerImg, blockX, blockY, 50,50);
-};
-function moveBlockDown(){
-    console.log(blockX,blockY);
-    context.clearRect(blockX,blockY,50,50);
-    blockY+=block_dy;
-    let borderDown=canvas.heght-100;
-    if(blockY>=borderDown){
-        blockY=borderDown;
-    }
-=======
->>>>>>> 721a6eeec0a2ecfc3eaf52642c5d706484747234
     context.drawImage(playerImg, blockX, blockY, 50, 50);
 }
 
@@ -111,6 +98,60 @@ function moveDioganalyLeftDown() {
     context.drawImage(playerImg, blockX, blockY, 50, 50);
 }
 
+<<<<<<< HEAD
+=======
+let bulletSize = 30;
+let bulletSpeed = 20;
+let bullets = [];
+
+function createBullet(x, y, direction) {
+    bullets.push({ x: x, y: y, direction: direction});
+}
+
+function refreshBullets() {
+    for (var i = 0; i < bullets.length; i++) {
+        var bullet = bullets[i];
+
+        if (bullet.direction === "up") {
+            bullet.y -= bulletSpeed;
+        } else if (bullet.direction === "down") {
+            bullet.y += bulletSpeed;
+        } else if (bullet.direction === "left") {
+            bullet.x -= bulletSpeed;
+        } else if (bullet.direction === "right") {
+            bullet.x += bulletSpeed;
+        }
+
+        /*for (var j = 0; j < viholliset.length; j++) {
+            var vihollinen = viholliset[j];
+            if (tarkistaTörmäys(ammus, vihollinen)) {
+                viholliset.splice(j, 1);
+                ammukset.splice(i, 1);
+                i--;
+                break;
+            }
+        }*/
+
+        if (bullet.x < 0 || 
+            bullet.x > canvas.width || 
+            bullet.y < 0 || 
+            bullet.y > canvas.height
+        ) {
+            bullets.splice(i, 1);
+            i--;
+        }
+    }
+}
+
+function drawBullets() {
+    context.fillStyle = "red";
+    for (var i = 0; i < bullets.length; i++) {
+        var bullet = bullets[i];
+        context.fillRect(bullet.x, bullet.y, bulletSize, bulletSize);
+    }
+};
+
+>>>>>>> 3881efa02f5df144e3752be559ae6fd8a7ed1475
 
 let dx=3;
 let dy=3;
@@ -120,6 +161,8 @@ let enemyInfoList=[
     {x:window.innerWidth / 2, y:innerHeight - 100},
     {x:window.innerWidth / 2, y:0}
 ]
+let enemyBtm=new Image;
+enemyBtm.src="enemyImgs/enemyBtm.png";
 function createEnemies() {
     spawnSide = Math.floor(Math.random() * 4) + 1;
     switch (spawnSide) {
@@ -136,7 +179,8 @@ function createEnemies() {
         case 3: // bottom spawn
             context.clearRect(enemyInfoList[2].x, enemyInfoList[2].y, 50, 100);
             enemyInfoList[2].y-=dy;
-            context.fillRect(enemyInfoList[2].x, enemyInfoList[2].y, 50, 100);
+            //context.fillRect(enemyInfoList[2].x, enemyInfoList[2].y, 50, 100);
+            context.drawImage(enemyBtm, enemyInfoList[2].x, enemyInfoList[2].y);
             break;
         case 4: // top spawn
             context.clearRect(enemyInfoList[3].x, enemyInfoList[3].y, 50, 100);
