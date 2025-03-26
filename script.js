@@ -97,62 +97,6 @@ function moveDioganalyLeftDown() {
     blockX -= block_dx;
     context.drawImage(playerImg, blockX, blockY, 50, 50);
 }
-
-<<<<<<< HEAD
-=======
-let bulletSize = 30;
-let bulletSpeed = 20;
-let bullets = [];
-
-function createBullet(x, y, direction) {
-    bullets.push({ x: x, y: y, direction: direction});
-}
-
-function refreshBullets() {
-    for (var i = 0; i < bullets.length; i++) {
-        var bullet = bullets[i];
-
-        if (bullet.direction === "up") {
-            bullet.y -= bulletSpeed;
-        } else if (bullet.direction === "down") {
-            bullet.y += bulletSpeed;
-        } else if (bullet.direction === "left") {
-            bullet.x -= bulletSpeed;
-        } else if (bullet.direction === "right") {
-            bullet.x += bulletSpeed;
-        }
-
-        /*for (var j = 0; j < viholliset.length; j++) {
-            var vihollinen = viholliset[j];
-            if (tarkistaTörmäys(ammus, vihollinen)) {
-                viholliset.splice(j, 1);
-                ammukset.splice(i, 1);
-                i--;
-                break;
-            }
-        }*/
-
-        if (bullet.x < 0 || 
-            bullet.x > canvas.width || 
-            bullet.y < 0 || 
-            bullet.y > canvas.height
-        ) {
-            bullets.splice(i, 1);
-            i--;
-        }
-    }
-}
-
-function drawBullets() {
-    context.fillStyle = "red";
-    for (var i = 0; i < bullets.length; i++) {
-        var bullet = bullets[i];
-        context.fillRect(bullet.x, bullet.y, bulletSize, bulletSize);
-    }
-};
-
->>>>>>> 3881efa02f5df144e3752be559ae6fd8a7ed1475
-
 let dx=3;
 let dy=3;
 let enemyInfoList=[
