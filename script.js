@@ -8,6 +8,15 @@ let blockY = window.innerHeight / 2 - 25;
 let block_dx = 10;
 let block_dy = 10;
 
+var holeX = canvas.width / 2 - 150;
+var holeY = canvas.height / 2 - 150;
+var holeXwidth = 300;
+var holeYheight = 300;
+
+var enemies = [];
+var enemySize = 40;
+var enemySpeed = 20;
+
 let bulletSize = 10;
 let bulletSpeed = 20;
 let bullets = [];
@@ -101,9 +110,91 @@ function moveDioganalyLeftDown() {
     blockX -= block_dx;
     context.drawImage(playerImg, blockX, blockY, 50, 50);
 }
-let dx=3;
-let dy=3;
-let enemyInfoList=[
+
+function enemyHoles() {        /*LUO AUKOT JOISTA VIHOLLISET TULEE*/
+    holeUp();
+    holeDown();
+    holeLeft();
+    holeRight();
+}
+
+function holeUp() {             /*AUKKO YLÖS*/
+    context.fillStyle = "red";
+    context.fillRect(holeX, 0, holeXwidth, 30);
+}
+
+function holeDown() {           /*AUKKO ALAS*/
+    context.fillStyle = "red";
+    context.fillRect(holeX, canvas.height - 30, holeXwidth, 30);
+}
+
+function holeLeft() {           /*AUKKO VASEMALLE*/
+    context.fillStyle = "red";
+    context.fillRect(0, holeY, 30, holeYheight);
+}
+
+function holeRight() {          /*AUKKO OIKEALLE*/
+    context.fillStyle = "red";
+    context.fillRect(canvas.width - 30, holeY, 30, holeYheight);
+}
+
+function createEnemies() {          /*LUO VIHOLLISET SATTUMANVARAISESTI ERI AUKOISTA*/
+    var hole = Math.floor(Math.random() * 4);
+    var x, y, directionX, directionY;
+
+    if (hole === 0) {         /* 0 = YLHÄÄLTÄ */
+        x = holeX + Math.random() * holeXwidth;
+        y = 0;
+        directionX = (Math.random() - 0.5) * 2;
+        directionY = 2;
+    } else if (hole === 1) {  /* 1 = ALHAALTA */
+        x = holeX + Math.random() * holeXwidth;
+        y = canvas.height - enemySize;
+        directionX = (Math.random() - 0.5) * 2;
+        directionY = -2;
+    } else if (hole === 2) {  /* 2 = VASEMMALTA */
+        x = 0;
+        y = holeY + Math.random() * holeYheight;
+        directionX = 2;
+        directionY = (Math.random() - 0.5) * 2;
+    } else if (hole === 3) {  /* 3 = OIKEALTA */
+        x = canvas.width - enemySize;
+        y = holeY + Math.random() * holeYheight;
+        directionX = -2;
+        directionY = (Math.random() - 0.5) * 2;
+    }
+    enemies.push({x, y, directionX, directionY, enemySize});
+    
+}
+function drawEnemies() {                /*PIIRTÄÄ VIHOLLISET*/
+    context.fillStyle = "yellow";
+    enemies.forEach(enemy => {
+        context.fillRect(
+            enemy.x - enemy.enemySize / 2,
+            enemy.y - enemy.enemySize / 2,
+            enemy.enemySize,
+            enemy.enemySize
+        );
+    });
+}
+
+function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
+    enemies.forEach(enemy => {
+        enemy.x += enemy.directionX * enemySpeed / 10;
+        enemy.y += enemy.directionY * enemySpeed / 10;
+
+        if (enemy.x <= 0 || enemy.x + enemy.enemySize >= canvas.width) {
+            enemy.directionX *= -1;
+        }
+        if (enemy.y <= 0 || enemy.y + enemy.enemySize >= canvas.height) {
+            enemy.directionY *= -1;
+        }
+    });
+}
+
+/*let dx=3;                 TÄMÄ ON EGOR SINUN TEKEMÄÄ, EN OLE POISTANUT MITÄÄN
+let dy=3;                   KOMMENTOIN VAAN POIS KUN EN SAANUT TOIMIMAAN
+let enemyInfoList=[         JA KOKEILIN TEHDÄ UUDESTAA VIHOLLISET
     {x:0, y:window.innerHeight / 2 - 50},
     {x:window.innerWidth-50, y:window.innerHeight / 2 - 50},
     {x:window.innerWidth / 2, y:innerHeight - 100},
@@ -150,13 +241,13 @@ function createEnemies() {
         enemyInfoList[3].y=0;
     }
 };
-createEnemies();
+createEnemies();*/
 
-function createBullet(x, y, direction) {
+function createBullet(x, y, direction) {        /*LUO AMMUKSEN*/
     bullets.push({ x: x, y: y, direction: direction});
 }
 
-function drawBullets() {
+function drawBullets() {                        /*PIIRTÄÄ AMMUKSEN*/
     context.fillStyle = "red";
     
     for (var i = 0; i < bullets.length; i++) {
@@ -165,7 +256,7 @@ function drawBullets() {
     }
 }
 
-function refreshBullets() {
+function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
     for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
 
@@ -251,20 +342,21 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key];
 });
-
+enemyHoles();
 function refreshAll() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, canvas.width, canvas.height);   /*TYHJENTÄÄ KANVAKSEN*/
     moveBlockDown();
-    moveBlockLeft();
+    moveBlockLeft();                           /*NÄMÄ FUNKTIOT LUO UUDELLEEN OBJEKTIT*/
     moveBlockRight();
     moveBlockUp();
-    //createEnemies();
     refreshBullets();
     drawBullets();
-    
+    enemyHoles();
+    drawEnemies();
+    moveEnemies();
 
     requestAnimationFrame(refreshAll);
 }
 
 refreshAll();
-//setInterval(createEnemies, 3000);
+setInterval(createEnemies, 3000);              /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
