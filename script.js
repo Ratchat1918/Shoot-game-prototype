@@ -8,6 +8,10 @@ let blockY = window.innerHeight / 2 - 25;
 let block_dx = 10;
 let block_dy = 10;
 
+let bulletSize = 10;
+let bulletSpeed = 20;
+let bullets = [];
+
 console.log(`Pelaajan sijaitsi X:${blockX}, Y:${blockY}`);
 
 let playerImg = new Image();
@@ -123,8 +127,8 @@ function createEnemies() {
         case 3: // bottom spawn
             context.clearRect(enemyInfoList[2].x, enemyInfoList[2].y, 50, 100);
             enemyInfoList[2].y-=dy;
-            //context.fillRect(enemyInfoList[2].x, enemyInfoList[2].y, 50, 100);
-            context.drawImage(enemyBtm, enemyInfoList[2].x, enemyInfoList[2].y);
+            context.fillRect(enemyInfoList[2].x, enemyInfoList[2].y, 50, 100);
+            //context.drawImage(enemyBtm, enemyInfoList[2].x, enemyInfoList[2].y);
             break;
         case 4: // top spawn
             context.clearRect(enemyInfoList[3].x, enemyInfoList[3].y, 50, 100);
@@ -148,6 +152,45 @@ function createEnemies() {
 };
 createEnemies();
 
+function createBullet(x, y, direction) {
+    bullets.push({ x: x, y: y, direction: direction});
+}
+
+function drawBullets() {
+    context.fillStyle = "red";
+    
+    for (var i = 0; i < bullets.length; i++) {
+        var bullet = bullets[i];
+        context.fillRect(bullet.x, bullet.y, bulletSize, bulletSize);
+    }
+}
+
+function refreshBullets() {
+    for (var i = 0; i < bullets.length; i++) {
+        var bullet = bullets[i];
+
+        if (bullet.direction === "up") {
+            bullet.y -= bulletSpeed;
+        } else if (bullet.direction === "down") {
+            bullet.y += bulletSpeed;
+        } else if (bullet.direction === "left") {
+            bullet.x -= bulletSpeed;
+        } else if (bullet.direction === "right") {
+            bullet.x += bulletSpeed;
+        }
+
+        if (bullet.x < 0 || 
+            bullet.x > canvas.width || 
+            bullet.y < 0 || 
+            bullet.y > canvas.height
+        ) {
+            bullets.splice(i, 1);
+            i--;
+        }
+        
+    }
+}       
+
 document.addEventListener("keydown", function (keyInput) {
     switch (keyInput.code) {
         case 'KeyD':
@@ -163,7 +206,9 @@ document.addEventListener("keydown", function (keyInput) {
             moveBlockDown();
             break;
         case "ArrowUp":
-            createBullet(blockX + 50 / 2 - bulletSize / 2, blockY,"up");
+            createBullet(blockX + 50 / 2 - bulletSize / 2, 
+                blockY,
+                "up");
             break;
         case "ArrowDown":
             createBullet(
@@ -206,3 +251,20 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key];
 });
+
+function refreshAll() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    moveBlockDown();
+    moveBlockLeft();
+    moveBlockRight();
+    moveBlockUp();
+    //createEnemies();
+    refreshBullets();
+    drawBullets();
+    
+
+    requestAnimationFrame(refreshAll);
+}
+
+refreshAll();
+//setInterval(createEnemies, 3000);
