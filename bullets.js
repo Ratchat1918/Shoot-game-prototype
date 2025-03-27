@@ -20,15 +20,15 @@ function refreshBullets() {
             bullet.x += bulletSpeed;
         }
 
-        /*for (var j = 0; j < viholliset.length; j++) {
-            var vihollinen = viholliset[j];
-            if (tarkistaTörmäys(ammus, vihollinen)) {
-                viholliset.splice(j, 1);
-                ammukset.splice(i, 1);
+        for (var j = 0; j < enemies.length; j++) {
+            var enemy = enemies[j];
+            if (checkHit(bullet, enemy)) {
+                enemies.splice(j, 1);
+                bullets.splice(i, 1);
                 i--;
                 break;
             }
-        }*/
+        }
 
         if (bullet.x < 0 || 
             bullet.x > canvas.width || 
@@ -39,6 +39,15 @@ function refreshBullets() {
             i--;
         }
     }
+}
+
+function checkHit(bullet, enemy) {
+    return (
+        bullet.x < enemy.x + enemy.enemySize &&
+        bullet.x + bulletSize > enemy.x &&
+        bullet.y < enemy.y + enemy.enemySize &&
+        bullet.y + bulletSize > enemy.y
+    );
 }
 
 function drawBullets() {

@@ -120,22 +120,22 @@ function enemyHoles() {        /*LUO AUKOT JOISTA VIHOLLISET TULEE*/
 
 function holeUp() {             /*AUKKO YLÖS*/
     context.fillStyle = "red";
-    context.fillRect(holeX, 0, holeXwidth, 30);
+    context.fillRect(holeX, 0, holeXwidth, 15);
 }
 
 function holeDown() {           /*AUKKO ALAS*/
     context.fillStyle = "red";
-    context.fillRect(holeX, canvas.height - 30, holeXwidth, 30);
+    context.fillRect(holeX, canvas.height - 15, holeXwidth, 15);
 }
 
 function holeLeft() {           /*AUKKO VASEMALLE*/
     context.fillStyle = "red";
-    context.fillRect(0, holeY, 30, holeYheight);
+    context.fillRect(0, holeY, 15, holeYheight);
 }
 
 function holeRight() {          /*AUKKO OIKEALLE*/
     context.fillStyle = "red";
-    context.fillRect(canvas.width - 30, holeY, 30, holeYheight);
+    context.fillRect(canvas.width - 15, holeY, 15, holeYheight);
 }
 
 function createEnemies() {          /*LUO VIHOLLISET SATTUMANVARAISESTI ERI AUKOISTA*/
@@ -270,6 +270,16 @@ function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
             bullet.x += bulletSpeed;
         }
 
+        for (var j = 0; j < enemies.length; j++) {
+            var enemy = enemies[j];
+            if (checkHit(bullet, enemy)) {  /*JOS OSUMA POISTAA AMMUKSEN JA VIHOLLISEN*/
+                enemies.splice(j, 1);
+                bullets.splice(i, 1);
+                i--;
+                break;
+            }
+        }
+
         if (bullet.x < 0 || 
             bullet.x > canvas.width || 
             bullet.y < 0 || 
@@ -280,7 +290,16 @@ function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
         }
         
     }
-}       
+}
+
+function checkHit(bullet, enemy) {              /*TARKISTAA OSUMAN VIHOLLISEEN*/
+    return (
+        bullet.x < enemy.x + enemy.enemySize &&
+        bullet.x + bulletSize > enemy.x &&
+        bullet.y < enemy.y + enemy.enemySize &&
+        bullet.y + bulletSize > enemy.y
+    );
+}
 
 document.addEventListener("keydown", function (keyInput) {
     switch (keyInput.code) {
@@ -359,4 +378,4 @@ function refreshAll() {
 }
 
 refreshAll();
-setInterval(createEnemies, 3000);              /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
+//setInterval(createEnemies, 3000);              /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
