@@ -3,10 +3,10 @@ var context = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let blockX = window.innerWidth / 2 - 25;
-let blockY = window.innerHeight / 2 - 25;
-let block_dx = 10;
-let block_dy = 10;
+var blockX = window.innerWidth / 2 - 25;
+var blockY = window.innerHeight / 2 - 25;
+var block_dx = 10;
+var block_dy = 10;
 
 var holeX = canvas.width / 2 - 150;
 var holeY = canvas.height / 2 - 150;
@@ -20,6 +20,13 @@ var enemySpeed = 20;
 let bulletSize = 10;
 let bulletSpeed = 20;
 let bullets = [];
+
+var player = {
+    x: blockX,
+    y: blockY,
+    width: 50,
+    height: 50
+};
 
 console.log(`Pelaajan sijaitsi X:${blockX}, Y:${blockY}`);
 
@@ -178,16 +185,29 @@ function drawEnemies() {                /*PIIRTÄÄ VIHOLLISET*/
     });
 }
 
+function checkCollision(player, enemy) {      /*TARKISTAA OSUUKO VIHOLLINEN PELAAJAAN*/
+    
+    return blockX < enemy.x + enemy.enemySize &&
+            blockX + player.width > enemy.x &&
+            blockY < enemy.y + enemy.enemySize &&
+            blockY + player.height > enemy.y;
+}
+
 function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
-    enemies.forEach(enemy => {
+    enemies.forEach((enemy, index) => {
         enemy.x += enemy.directionX * enemySpeed / 10;
         enemy.y += enemy.directionY * enemySpeed / 10;
 
-        if (enemy.x <= 0 || enemy.x + enemy.enemySize >= canvas.width) {
-            enemy.directionX *= -1;
+        if (checkCollision(player, enemy)) {
+            console.log("OSuma");
+            gameOver();
         }
+
+        if (enemy.x <= 0 || enemy.x + enemy.enemySize >= canvas.width) {
+            enemy.directionX *= -1;         /*VIHOLLINEN KIMPOAAA SEINÄSTÄ*/
+        }                                   
         if (enemy.y <= 0 || enemy.y + enemy.enemySize >= canvas.height) {
-            enemy.directionY *= -1;
+            enemy.directionY *= -1;         /*VIHOLLINEN KIMPOAAA SEINÄSTÄ*/
         }
     });
 }
@@ -301,6 +321,37 @@ function checkHit(bullet, enemy) {              /*TARKISTAA OSUMAN VIHOLLISEEN*/
     );
 }
 
+function gameOver() {
+    console.log("Peli päättyi");
+    alert("Osuma, peli päättyi");
+    let restart = confirm("Haluatko pelata uudestaan?");
+
+    if (restart) {
+        resetGame();
+        location.reload();
+    } else {
+        alert("Kiitos pelaamisesta!");
+    }
+    
+}
+
+function resetGame() {
+    blockX = window.innerWidth / 2 -25;
+    blockY = window.innerHeight / 2 -25;
+    enemies = [];
+    bullets = [];
+    player = {
+        x: blockX,
+        y: blockY,
+        width: 50,
+        height: 50
+    };
+    playerImg.onload = function() {
+        context.drawImage(playerImg, blockX, blockY, 50, 50);
+    };
+
+}
+
 document.addEventListener("keydown", function (keyInput) {
     switch (keyInput.code) {
         case 'KeyD':
@@ -373,9 +424,11 @@ function refreshAll() {
     enemyHoles();
     drawEnemies();
     moveEnemies();
+    
+    
 
     requestAnimationFrame(refreshAll);
 }
 
 refreshAll();
-//setInterval(createEnemies, 3000);              /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
+setInterval(createEnemies, 7000);              /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
