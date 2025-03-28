@@ -1,23 +1,28 @@
-var canvas = document.querySelector("canvas");
+var canvas = document.getElementById("gameArea");
 var context = canvas.getContext('2d');
-canvas.width = window.innerWidth;
+canvas.width = window.innerWidth * 0.75;
 canvas.height = window.innerHeight;
 
-var blockX = window.innerWidth / 2 - 25;
-var blockY = window.innerHeight / 2 - 25;
+var playerWidth = canvas.width * 0.03;
+var blockX = canvas.width / 2 - playerWidth / 2;
+var blockY = canvas.height / 2 - playerWidth / 2;
 var block_dx = 10;
 var block_dy = 10;
 
-var holeX = canvas.width / 2 - 150;
-var holeY = canvas.height / 2 - 150;
-var holeXwidth = 300;
-var holeYheight = 300;
+var holeXwidth = canvas.width * 0.2;
+var holeYheight = canvas.height * 0.35;
+var holeX = canvas.width / 2 - holeXwidth / 2;
+var holeY = canvas.height / 2 - holeYheight / 2;
+var holeDepth = holeXwidth * 0.05;
 
 var enemies = [];
-var enemySize = 40;
+var enemySize = canvas.width * 0.02;
 var enemySpeed = 20;
+var enemiesSecBetw = 3000;
+var countHits = 0;
+var intervalId;
 
-let bulletSize = 10;
+let bulletSize = canvas.width * 0.007;
 let bulletSpeed = 20;
 let bullets = [];
 
@@ -40,82 +45,82 @@ let playerImgRight = new Image();
 playerImgRight.src = "playerImgs/PlayerRight.png";
 
 playerImg.onload = function() {
-    context.drawImage(playerImg, blockX, blockY, 50, 50);
+    context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 };
 
 function moveBlockRight() {
-    context.clearRect(blockX, blockY, 50, 50);
+    context.clearRect(blockX, blockY, playerWidth, playerWidth);
     blockX += block_dx;
-    let borderRight = canvas.width - 50;
+    let borderRight = canvas.width - playerWidth;
     if (blockX >= borderRight) {
         blockX = borderRight;
     }
-    context.drawImage(playerImgRight, blockX, blockY, 50, 50);
+    context.drawImage(playerImgRight, blockX, blockY, playerWidth, playerWidth);
 }
 
 function moveBlockLeft() {
-    context.clearRect(blockX, blockY, 50, 50);
+    context.clearRect(blockX, blockY, playerWidth, playerWidth);
     blockX -= block_dx;
     if (blockX <= 0) {
         blockX = 0;
     }
-    context.drawImage(playerImgLeft, blockX, blockY, 50, 50);
+    context.drawImage(playerImgLeft, blockX, blockY, playerWidth, playerWidth);
 }
 
 function moveBlockUp() {
-    context.clearRect(blockX, blockY, 50, 50);
+    context.clearRect(blockX, blockY, playerWidth, playerWidth);
     blockY -= block_dy;
     if (blockY <= 0) {
         blockY = 0;
     }
-    context.drawImage(playerImg, blockX, blockY, 50, 50);
+    context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 }
 
 function moveBlockDown() {
-    context.clearRect(blockX, blockY, 50, 50);
+    context.clearRect(blockX, blockY, playerWidth, playerWidth);
     blockY += block_dy;
     let borderDown = canvas.height - 100;
     if (blockY >= borderDown) {
         blockY = borderDown;
     }
-    context.drawImage(playerImgDown, blockX, blockY, 50, 50);
+    context.drawImage(playerImgDown, blockX, blockY, playerWidth, playerWidth);
 }
 
 function moveDioganalyRightUp() {
-    context.clearRect(blockX, blockY, 50, 50);
+    context.clearRect(blockX, blockY, playerWidth, playerWidth);
     blockX += block_dx;
     blockY -= block_dy;
-    let borderRight = canvas.width - 50;
+    let borderRight = canvas.width - playerWidth;
     if (blockY <= 0 && blockX >= borderRight) {
         blockX = borderRight;
         blockY = 0;
     }
-    context.drawImage(playerImg, blockX, blockY, 50, 50);
+    context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 }
 
 function moveDioganalyLeftUp() {
-    context.clearRect(blockX, blockY, 50, 50);
+    context.clearRect(blockX, blockY, playerWidth, playerWidth);
     blockY -= block_dy;
     blockX -= block_dx;
     if (blockY <= 0 && blockX <= 0) {
         blockX = 0;
         blockY = 0;
     }
-    context.drawImage(playerImg, blockX, blockY, 50, 50);
+    context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 }
 
 function moveDioganalyRightDown() {
-    context.clearRect(blockX, blockY, 50, 50);
+    context.clearRect(blockX, blockY, playerWidth, playerWidth);
     blockY += block_dy;
     blockX += block_dx;
-    context.drawImage(playerImg, blockX, blockY, 50, 50);
+    context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 }
 
 function moveDioganalyLeftDown() {
-    context.clearRect(blockX, blockY, 50, 50);
+    context.clearRect(blockX, blockY, playerWidth, playerWidth);
     blockY += block_dy;
     blockX -= block_dx;
-    context.drawImage(playerImg, blockX, blockY, 50, 50);
+    context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 }
 
 function enemyHoles() {        /*LUO AUKOT JOISTA VIHOLLISET TULEE*/
@@ -127,22 +132,22 @@ function enemyHoles() {        /*LUO AUKOT JOISTA VIHOLLISET TULEE*/
 
 function holeUp() {             /*AUKKO YLÖS*/
     context.fillStyle = "red";
-    context.fillRect(holeX, 0, holeXwidth, 15);
+    context.fillRect(holeX, 0, holeXwidth, holeDepth);
 }
 
 function holeDown() {           /*AUKKO ALAS*/
     context.fillStyle = "red";
-    context.fillRect(holeX, canvas.height - 15, holeXwidth, 15);
+    context.fillRect(holeX, canvas.height - holeDepth, holeXwidth, holeDepth);
 }
 
 function holeLeft() {           /*AUKKO VASEMALLE*/
     context.fillStyle = "red";
-    context.fillRect(0, holeY, 15, holeYheight);
+    context.fillRect(0, holeY, holeDepth, holeYheight);
 }
 
 function holeRight() {          /*AUKKO OIKEALLE*/
     context.fillStyle = "red";
-    context.fillRect(canvas.width - 15, holeY, 15, holeYheight);
+    context.fillRect(canvas.width - holeDepth, holeY, holeDepth, holeYheight);
 }
 
 function createEnemies() {          /*LUO VIHOLLISET SATTUMANVARAISESTI ERI AUKOISTA*/
@@ -186,11 +191,10 @@ function drawEnemies() {                /*PIIRTÄÄ VIHOLLISET*/
 }
 
 function checkCollision(player, enemy) {      /*TARKISTAA OSUUKO VIHOLLINEN PELAAJAAN*/
-    
-    return blockX < enemy.x + enemy.enemySize &&
-            blockX + player.width > enemy.x &&
-            blockY < enemy.y + enemy.enemySize &&
-            blockY + player.height > enemy.y;
+    return blockX < enemy.x + enemy.enemySize - 15 &&    /**VASEMMALTA? HYVÄ OSUMA */
+            blockX + player.width - 5 > enemy.x &&      /**OIKEALTA? HYVÄ OSUMA */
+            blockY < enemy.y + enemy.enemySize - 20 &&   /**YLHÄÄLTÄ? SLÄK */
+            blockY + player.height - 5 > enemy.y;       /**ALHAALTA? HYVÄ OSUMA */
 }
 
 function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
@@ -198,7 +202,7 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
         enemy.x += enemy.directionX * enemySpeed / 10;
         enemy.y += enemy.directionY * enemySpeed / 10;
 
-        if (checkCollision(player, enemy)) {
+        if (checkCollision(player, enemy)) {    /**OSUMAN TARKISTUS VIHOLLINEN <--> PELAAAJA */
             console.log("OSuma");
             gameOver();
         }
@@ -269,7 +273,6 @@ function createBullet(x, y, direction) {        /*LUO AMMUKSEN*/
 
 function drawBullets() {                        /*PIIRTÄÄ AMMUKSEN*/
     context.fillStyle = "red";
-    
     for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
         context.fillRect(bullet.x, bullet.y, bulletSize, bulletSize);
@@ -292,10 +295,19 @@ function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
 
         for (var j = 0; j < enemies.length; j++) {
             var enemy = enemies[j];
-            if (checkHit(bullet, enemy)) {  /*JOS OSUMA POISTAA AMMUKSEN JA VIHOLLISEN*/
+            if (checkHit(bullet, enemy)) {  /*JOS OSUMA, POISTAA AMMUKSEN JA VIHOLLISEN*/
                 enemies.splice(j, 1);
                 bullets.splice(i, 1);
                 i--;
+                countHits += 1;
+                console.log(countHits);
+                if (countHits === 10) {     /**10 OSUMAN VÄLEIN VIHOLLISIA TULEE NOPEAMMIN */
+                    if (enemiesSecBetw > 500) {
+                        enemiesSecBetw -= 500;
+                    }
+                    countHits -= 10;
+                    updateInterval();
+                }
                 break;
             }
         }
@@ -321,7 +333,7 @@ function checkHit(bullet, enemy) {              /*TARKISTAA OSUMAN VIHOLLISEEN*/
     );
 }
 
-function gameOver() {
+function gameOver() {       /**ILMOITUS PELIN PÄÄTTYMISESTÄ */
     console.log("Peli päättyi");
     alert("Osuma, peli päättyi");
     let restart = confirm("Haluatko pelata uudestaan?");
@@ -335,19 +347,21 @@ function gameOver() {
     
 }
 
-function resetGame() {
+function resetGame() {         /**ALUSTAA ALKUPERÄISET ARVOT JOS PELATAAN UUDESTAAN */
     blockX = window.innerWidth / 2 -25;
     blockY = window.innerHeight / 2 -25;
     enemies = [];
     bullets = [];
+    enemiesSecBetw = 3000;
+    countHits = 0;
     player = {
         x: blockX,
         y: blockY,
-        width: 50,
-        height: 50
+        width: playerWidth,
+        height: playerWidth
     };
     playerImg.onload = function() {
-        context.drawImage(playerImg, blockX, blockY, 50, 50);
+        context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
     };
 
 }
@@ -367,28 +381,29 @@ document.addEventListener("keydown", function (keyInput) {
             moveBlockDown();
             break;
         case "ArrowUp":
-            createBullet(blockX + 50 / 2 - bulletSize / 2, 
+            createBullet(
+                blockX + playerWidth / 2 - bulletSize / 2, 
                 blockY,
                 "up");
             break;
         case "ArrowDown":
             createBullet(
-                blockX + 50 / 2 - bulletSize / 2,
-                blockY + 50,
+                blockX + playerWidth / 2 - bulletSize / 2,
+                blockY + playerWidth,
                 "down"
                 );
             break;
         case "ArrowLeft":
             createBullet(
                 blockX, 
-                blockY + 50 / 2 - bulletSize / 2,
+                blockY + playerWidth / 2 - bulletSize / 2,
                 "left"
             );
             break;
         case "ArrowRight":
             createBullet(
-                blockX + 50,
-                blockY + 50 / 2 - bulletSize / 2,
+                blockX + playerWidth,
+                blockY + playerWidth / 2 - bulletSize / 2,
                 "right"
             );
             break;
@@ -419,16 +434,18 @@ function refreshAll() {
     moveBlockLeft();                           /*NÄMÄ FUNKTIOT LUO UUDELLEEN OBJEKTIT*/
     moveBlockRight();
     moveBlockUp();
-    refreshBullets();
-    drawBullets();
-    enemyHoles();
     drawEnemies();
     moveEnemies();
+    drawBullets();
+    refreshBullets();
+    enemyHoles();
     
-    
-
     requestAnimationFrame(refreshAll);
 }
 
 refreshAll();
-setInterval(createEnemies, 7000);              /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
+setInterval(createEnemies, enemiesSecBetw);  /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
+function updateInterval() {              
+    clearInterval(intervalId);              /**KUN 10 OSUMAA VIHOLLISIA NOPEAMMIN */
+    intervalId = setInterval(createEnemies, enemiesSecBetw);
+}

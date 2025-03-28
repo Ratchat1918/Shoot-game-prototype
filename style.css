@@ -1,11 +1,32 @@
-canvas{
-    display: block;
+.wholeArea {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+}
+
+#scoreBoard {
+    width: 25%;
+    box-sizing: border-box;
+    background: rgb(51, 255, 255);
+    border:10px solid #000000;
+}
+
+#gameArea {
+    width: 75%;
+    box-sizing: border-box;
+    background: rgb(51, 255, 255);
+    border:10px solid #000000;
+}
+
+/*canvas{
+    display: flex;
     width: 100vw;
     height: 100vh;
     box-sizing: border-box;
     background: rgb(51, 255, 255);
     border:10px solid #000000;
-}
+}*/
 body{
     margin: 0;
 }
