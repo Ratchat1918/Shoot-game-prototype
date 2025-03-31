@@ -28,6 +28,8 @@ let bulletSize = canvas.width * 0.007;
 let bulletSpeed = 20;
 let bullets = [];
 
+var shotSound=document.getElementById("myAudio");
+
 var player = {
     x: blockX,
     y: blockY,
@@ -221,6 +223,7 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
 
 function createBullet(x, y, direction) {        /*LUO AMMUKSEN*/
     bullets.push({ x: x, y: y, direction: direction});
+    shotSound.play();
 }
 
 function drawBullets() {                        /*PIIRTÄÄ AMMUKSEN*/
