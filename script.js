@@ -300,7 +300,7 @@ function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
                 bullets.splice(i, 1);
                 i--;
                 countHits += 1;
-                console.log(countHits);
+                ScoreBoardHits();
                 if (countHits === 10) {     /**10 OSUMAN VÄLEIN VIHOLLISIA TULEE NOPEAMMIN */
                     if (enemiesSecBetw > 500) {
                         enemiesSecBetw -= 500;
