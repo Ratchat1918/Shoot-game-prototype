@@ -375,6 +375,9 @@ function PauseGame(){
         isGamePaused=false;
     }
 }
+document.addEventListener("visibilitychange", () => {
+    window.alert("PAUSE\nPress ok or escape to continue");
+  });
 
 document.addEventListener("keydown", function (keyInput) {
     switch (keyInput.code) {
