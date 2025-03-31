@@ -5,7 +5,7 @@ canvas.height = window.innerHeight;
 
 let isGamePaused=false;
 
-var playerWidth = canvas.width * 0.03;
+var playerWidth = canvas.width * 0.05;
 var blockX = canvas.width / 2 - playerWidth / 2;
 var blockY = canvas.height / 2 - playerWidth / 2;
 var block_dx = 10;
@@ -40,14 +40,7 @@ var player = {
 console.log(`Pelaajan sijaitsi X:${blockX}, Y:${blockY}`);
 
 let playerImg = new Image();
-playerImg.src = "playerImgs/Player.png";
-let playerImgDown = new Image();
-playerImgDown.src = "playerImgs/PlayerDown.png";
-let playerImgLeft = new Image();
-playerImgLeft.src = "playerImgs/PlayerLeft.png";
-let playerImgRight = new Image();
-playerImgRight.src = "playerImgs/PlayerRight.png";
-
+playerImg.src = "spaceship.png";
 
 playerImg.onload = function() {
     context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
@@ -60,7 +53,7 @@ function moveBlockRight() {
     if (blockX >= borderRight) {
         blockX = borderRight;
     }
-    context.drawImage(playerImgRight, blockX, blockY, playerWidth, playerWidth);
+    context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 }
 
 function moveBlockLeft() {
@@ -69,7 +62,7 @@ function moveBlockLeft() {
     if (blockX <= 0) {
         blockX = 0;
     }
-    context.drawImage(playerImgLeft, blockX, blockY, playerWidth, playerWidth);
+    context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 }
 
 function moveBlockUp() {
@@ -88,7 +81,7 @@ function moveBlockDown() {
     if (blockY >= borderDown) {
         blockY = borderDown;
     }
-    context.drawImage(playerImgDown, blockX, blockY, playerWidth, playerWidth);
+    context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 }
 
 function moveDioganalyRightUp() {
