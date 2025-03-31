@@ -209,7 +209,7 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
 
         if (checkCollision(player, enemy)) {    /**OSUMAN TARKISTUS VIHOLLINEN <--> PELAAAJA */
             console.log("OSuma");
-            gameOver();
+            checkLives();
         }
 
         if (enemy.x <= 0 || enemy.x + enemy.enemySize >= canvas.width) {
@@ -256,7 +256,6 @@ function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
                 i--;
                 countHits += 1;
                 ScoreBoardHits();
-                console.log(countHits);
                 if (countHits === 10) {     /**10 OSUMAN VÄLEIN VIHOLLISIA TULEE NOPEAMMIN */
                     if (enemiesSecBetw > 500) {
                         enemiesSecBetw -= 500;

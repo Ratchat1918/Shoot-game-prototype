@@ -7,6 +7,7 @@ var fontSize = Math.floor(score.width * 0.12);
 var hitsInScoreBoard = 0;
 context1.font = fontSize + "px Arial";
 var levelHeight = score.height * 0.05;
+let lives = 3;
 
 function head() {
     var headTextWidth = context1.measureText("Scoreboard").width;
@@ -16,7 +17,6 @@ function head() {
 
 function ScoreBoardHits() {
     hitsInScoreBoard += 1;
-    console.log(hitsInScoreBoard);
     killedEnemies();
 }
 
@@ -158,6 +158,25 @@ function level() {
     context1.fillText("Game level", levelTextMiddle, score.height * 0.63); 
 }
 
+function checkLives() {
+    console.log(lives + " elämät");
+    if (lives === 0) {
+        gameOver();
+    } else {
+        lives -= 1;
+    }
+}
+
+function livesText() {
+    context1.clearRect(0, score.height * 0.73, score.width, score.height * 0.75);
+    context1.save();
+    context1.fillStyle = "black";
+    let livesTextWidth = context1.measureText("Lives: " + lives).width;
+    let livesTextMiddle = (score.width - livesTextWidth) / 2;
+    context1.fillText("Lives: " + lives, livesTextMiddle, score.height * 0.73);
+    context1.restore();
+}
+
 head();
 level();
 function refreshScoreBoard() {
@@ -169,6 +188,7 @@ function refreshScoreBoard() {
     level3();
     level2();
     level1();
+    livesText();
 
     requestAnimationFrame(refreshScoreBoard);
 }
