@@ -3,6 +3,8 @@ var context = canvas.getContext('2d');
 canvas.width = window.innerWidth * 0.75;
 canvas.height = window.innerHeight;
 
+let isGamePaused=false;
+
 var playerWidth = canvas.width * 0.03;
 var blockX = canvas.width / 2 - playerWidth / 2;
 var blockY = canvas.height / 2 - playerWidth / 2;
@@ -43,6 +45,7 @@ let playerImgLeft = new Image();
 playerImgLeft.src = "playerImgs/PlayerLeft.png";
 let playerImgRight = new Image();
 playerImgRight.src = "playerImgs/PlayerRight.png";
+
 
 playerImg.onload = function() {
     context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
@@ -366,6 +369,13 @@ function resetGame() {         /**ALUSTAA ALKUPERÄISET ARVOT JOS PELATAAN UUDES
 
 }
 
+function PauseGame(){
+    if(isGamePaused==true){
+        window.alert("PAUSE\nPress ok or escape to continue");
+        isGamePaused=false;
+    }
+}
+
 document.addEventListener("keydown", function (keyInput) {
     switch (keyInput.code) {
         case 'KeyD':
@@ -407,6 +417,9 @@ document.addEventListener("keydown", function (keyInput) {
                 "right"
             );
             break;
+        case "Escape":
+            isGamePaused=true;
+            break
     }
 });
 
@@ -439,7 +452,7 @@ function refreshAll() {
     drawBullets();
     refreshBullets();
     enemyHoles();
-    
+    PauseGame();
     requestAnimationFrame(refreshAll);
 }
 
