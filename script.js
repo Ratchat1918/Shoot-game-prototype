@@ -219,57 +219,6 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
     });
 }
 
-/*let dx=3;                 TÄMÄ ON EGOR SINUN TEKEMÄÄ, EN OLE POISTANUT MITÄÄN
-let dy=3;                   KOMMENTOIN VAAN POIS KUN EN SAANUT TOIMIMAAN
-let enemyInfoList=[         JA KOKEILIN TEHDÄ UUDESTAA VIHOLLISET
-    {x:0, y:window.innerHeight / 2 - 50},
-    {x:window.innerWidth-50, y:window.innerHeight / 2 - 50},
-    {x:window.innerWidth / 2, y:innerHeight - 100},
-    {x:window.innerWidth / 2, y:0}
-]
-let enemyBtm=new Image;
-enemyBtm.src="enemyImgs/enemyBtm.png";
-function createEnemies() {
-    spawnSide = Math.floor(Math.random() * 4) + 1;
-    switch (spawnSide) {
-        case 1: // left side spawn
-            context.clearRect(enemyInfoList[0].x, enemyInfoList[0].y, 50, 100);
-            enemyInfoList[0].x+=dx;
-            context.fillRect(enemyInfoList[0].x, enemyInfoList[0].y, 50, 100);
-            break;
-        case 2: // right side spawn
-            context.clearRect(enemyInfoList[1].x, enemyInfoList[1].y, 50, 100);
-            enemyInfoList[1].x-=dx;
-            context.fillRect(enemyInfoList[1].x, enemyInfoList[1].y, 50, 100);
-            break;
-        case 3: // bottom spawn
-            context.clearRect(enemyInfoList[2].x, enemyInfoList[2].y, 50, 100);
-            enemyInfoList[2].y-=dy;
-            context.fillRect(enemyInfoList[2].x, enemyInfoList[2].y, 50, 100);
-            //context.drawImage(enemyBtm, enemyInfoList[2].x, enemyInfoList[2].y);
-            break;
-        case 4: // top spawn
-            context.clearRect(enemyInfoList[3].x, enemyInfoList[3].y, 50, 100);
-            enemyInfoList[3].y+=dy;
-            context.fillRect(enemyInfoList[3].x, enemyInfoList[3].y, 50, 100);
-            break;
-    }
-    requestAnimationFrame(createEnemies);
-    if(enemyInfoList[0].x>=window.innerHeight){
-        enemyInfoList[0].x=0;
-    }
-    if(enemyInfoList[1].x<=0){
-        enemyInfoList[1].x=window.innerHeight / 2 - 50;
-    }
-    if(enemyInfoList[2].y<=0){
-        enemyInfoList[2].y=window.innerHeight - 100;
-    }
-    if(enemyInfoList[3].y>=window.innerHeight-100){
-        enemyInfoList[3].y=0;
-    }
-};
-createEnemies();*/
-
 function createBullet(x, y, direction) {        /*LUO AMMUKSEN*/
     bullets.push({ x: x, y: y, direction: direction});
 }
@@ -303,7 +252,7 @@ function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
                 bullets.splice(i, 1);
                 i--;
                 countHits += 1;
-                ScoreBoardHits();
+                console.log(countHits);
                 if (countHits === 10) {     /**10 OSUMAN VÄLEIN VIHOLLISIA TULEE NOPEAMMIN */
                     if (enemiesSecBetw > 500) {
                         enemiesSecBetw -= 500;
@@ -438,6 +387,102 @@ document.addEventListener('keydown', (event) => {
         moveDioganalyLeftDown()
     } else if (keysPressed['s'] && event.key == 'd' || keysPressed['d'] && event.key == 's') {
         moveDioganalyRightDown();
+    }else if (keysPressed['ArrowUp'] && event.key == 'w' || keysPressed['w'] && event.key == 'ArrowUp') {//Ylös liikkuminen ylös ampuminen
+        moveBlockUp();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "up");
+    }else if (keysPressed['ArrowDown'] && event.key == 'w' || keysPressed['w'] && event.key == 'ArrowDown') {//Ylös liikkuminen alas ampuminen
+        moveBlockUp();
+        createBullet( 
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "down");
+    }else if (keysPressed['ArrowLeft'] && event.key == 'w' || keysPressed['w'] && event.key == 'ArrowLeft') {//Ylös liikkuminen vasemmale ampuminen
+        moveBlockUp();
+        createBullet( 
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "left");
+    }else if (keysPressed['ArrowRight'] && event.key == 'w' || keysPressed['w'] && event.key == 'ArrowRight') {//Ylös liikkuminen oikealle ampuminen
+        moveBlockUp();
+        createBullet( 
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "right");
+    }else if (keysPressed['ArrowLeft'] && event.key == 's' || keysPressed['s'] && event.key == 'ArrowLeft') {//Alas liikkuminen vasemmale ampuminen
+        moveBlockDown();
+        createBullet( 
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "left");
+    }else if (keysPressed['ArrowRight'] && event.key == 's' || keysPressed['s'] && event.key == 'ArrowRight') {//Alas liikkuminen oikealle ampuminen
+        moveBlockDown();
+        createBullet( 
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "right");
+    }else if (keysPressed['ArrowDown'] && event.key == 's' || keysPressed['s'] && event.key == 'ArrowDown') {//Alas liikkuminen alas ampuminen
+        moveBlockDown();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "down");
+    }else if (keysPressed['ArrowUp'] && event.key == 's' || keysPressed['s'] && event.key == 'ArrowUp') {//Alas liikuminen ylös ampuminen
+        moveBlockDown();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "up");
+    }else if (keysPressed['ArrowRight'] && event.key == 'd' || keysPressed['d'] && event.key == 'ArrowRight') {//Liikkuminen oikealle oikealle ampuminen
+        moveBlockRight();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "right");
+    }else if (keysPressed['ArrowLeft'] && event.key == 'd' || keysPressed['d'] && event.key == 'ArrowLeft') {//Liikkuminen oikealle vasemmalle ampuminen
+        moveBlockRight();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "left");
+    }else if (keysPressed['ArrowUp'] && event.key == 'd' || keysPressed['d'] && event.key == 'ArrowUp') {//Liikkuminen oikealle ylös ampuminen
+        moveBlockRight();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "up");
+    }else if (keysPressed['ArrowDown'] && event.key == 'd' || keysPressed['d'] && event.key == 'ArrowDown') {//Liikkuminen oikealle alas ampuminen
+        moveBlockRight();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "down");
+    }else if (keysPressed['ArrowRight'] && event.key == 'a' || keysPressed['a'] && event.key == 'ArrowRight') {//Liikkuminen vasemmale oikealle ampuminen
+        moveBlockLeft();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "right");
+    }else if (keysPressed['ArrowLeft'] && event.key == 'a' || keysPressed['a'] && event.key == 'ArrowLeft') {//Liikkuminen vasemmale vasemmalle ampuminen
+        moveBlockLeft();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "left");
+    }else if (keysPressed['ArrowUp'] && event.key == 'a' || keysPressed['a'] && event.key == 'ArrowUp') {//Liikkuminen vasemmale ylös ampuminen
+        moveBlockLeft();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "up");
+    }else if (keysPressed['ArrowDown'] && event.key == 'a' || keysPressed['a'] && event.key == 'ArrowDown') {//Liikkuminen vasemmale alas ampuminen
+        moveBlockLeft();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "down");
     }
 });
 document.addEventListener('keyup', (event) => {
