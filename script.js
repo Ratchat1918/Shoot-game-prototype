@@ -46,6 +46,9 @@ playerImg.onload = function() {
     context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 };
 
+let enemyImg= new Image();
+enemyImg.src="satelite32x32.png";
+
 function moveBlockRight() {
     context.clearRect(blockX, blockY, playerWidth, playerWidth);
     blockX += block_dx;
@@ -179,7 +182,8 @@ function createEnemies() {          /*LUO VIHOLLISET SATTUMANVARAISESTI ERI AUKO
 function drawEnemies() {                /*PIIRTÄÄ VIHOLLISET*/
     context.fillStyle = "yellow";
     enemies.forEach(enemy => {
-        context.fillRect(
+        context.drawImage(
+            enemyImg,
             enemy.x - enemy.enemySize / 2,
             enemy.y - enemy.enemySize / 2,
             enemy.enemySize,
