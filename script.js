@@ -8,8 +8,8 @@ let isGamePaused=false;
 var playerWidth = canvas.width * 0.05;
 var blockX = canvas.width / 2 - playerWidth / 2;
 var blockY = canvas.height / 2 - playerWidth / 2;
-var block_dx = 10;
-var block_dy = 10;
+var block_dx = 12;
+var block_dy = 12;
 
 var holeXwidth = canvas.width * 0.2;
 var holeYheight = canvas.height * 0.35;
@@ -375,106 +375,202 @@ document.addEventListener("keydown", function (keyInput) {
 let keysPressed = {};
 document.addEventListener('keydown', (event) => {
     keysPressed[event.key] = true;
-    if (keysPressed['w'] && event.key == 'a' || keysPressed['a'] && event.key == 'w') {
+    if (keysPressed['w'] && keysPressed['a'] || keysPressed['a'] && keysPressed['w']) {
         moveDioganalyLeftUp();
-    } else if (keysPressed['w'] && event.key == 'd' || keysPressed['d'] && event.key == 'w') {
+    } else if (keysPressed['w'] && keysPressed['d'] || keysPressed['d'] && keysPressed['w']) {
         moveDioganalyRightUp();
-    } else if (keysPressed['s'] && event.key == 'a' || keysPressed['a'] && event.key == 's') {
+    } else if (keysPressed['s'] && keysPressed['a'] || keysPressed['a'] && keysPressed['s']) {
         moveDioganalyLeftDown()
-    } else if (keysPressed['s'] && event.key == 'd' || keysPressed['d'] && event.key == 's') {
+    } else if (keysPressed['s'] && keysPressed['d'] || keysPressed['d'] && keysPressed['s']) {
         moveDioganalyRightDown();
-    }else if (keysPressed['ArrowUp'] && event.key == 'w' || keysPressed['w'] && event.key == 'ArrowUp') {//Ylös liikkuminen ylös ampuminen
+    }else if (keysPressed['ArrowUp'] && keysPressed['w'] || keysPressed['w'] && keysPressed['ArrowUp']) {//Ylös liikkuminen ylös ampuminen
         moveBlockUp();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "up");
-    }else if (keysPressed['ArrowDown'] && event.key == 'w' || keysPressed['w'] && event.key == 'ArrowDown') {//Ylös liikkuminen alas ampuminen
+    }else if (keysPressed['ArrowDown'] && keysPressed['w'] || keysPressed['w'] && keysPressed['ArrowDown']) {//Ylös liikkuminen alas ampuminen
         moveBlockUp();
         createBullet( 
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "down");
-    }else if (keysPressed['ArrowLeft'] && event.key == 'w' || keysPressed['w'] && event.key == 'ArrowLeft') {//Ylös liikkuminen vasemmale ampuminen
+    }else if (keysPressed['ArrowLeft'] && keysPressed['w'] || keysPressed['w'] && keysPressed['ArrowLeft']) {//Ylös liikkuminen vasemmale ampuminen
         moveBlockUp();
         createBullet( 
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "left");
-    }else if (keysPressed['ArrowRight'] && event.key == 'w' || keysPressed['w'] && event.key == 'ArrowRight') {//Ylös liikkuminen oikealle ampuminen
+    }else if (keysPressed['ArrowRight'] && keysPressed['w'] || keysPressed['w'] && keysPressed['ArrowRight']) {//Ylös liikkuminen oikealle ampuminen
         moveBlockUp();
         createBullet( 
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "right");
-    }else if (keysPressed['ArrowLeft'] && event.key == 's' || keysPressed['s'] && event.key == 'ArrowLeft') {//Alas liikkuminen vasemmale ampuminen
+    }else if (keysPressed['ArrowLeft'] && keysPressed['s'] || keysPressed['s'] && keysPressed['ArrowLeft']) {//Alas liikkuminen vasemmale ampuminen
         moveBlockDown();
         createBullet( 
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "left");
-    }else if (keysPressed['ArrowRight'] && event.key == 's' || keysPressed['s'] && event.key == 'ArrowRight') {//Alas liikkuminen oikealle ampuminen
+    }else if (keysPressed['ArrowRight'] && keysPressed['s'] || keysPressed['s'] && keysPressed['ArrowRight']) {//Alas liikkuminen oikealle ampuminen
         moveBlockDown();
         createBullet( 
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "right");
-    }else if (keysPressed['ArrowDown'] && event.key == 's' || keysPressed['s'] && event.key == 'ArrowDown') {//Alas liikkuminen alas ampuminen
+    }else if (keysPressed['ArrowDown'] && keysPressed['s'] || keysPressed['s'] && keysPressed['ArrowDown']) {//Alas liikkuminen alas ampuminen
         moveBlockDown();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "down");
-    }else if (keysPressed['ArrowUp'] && event.key == 's' || keysPressed['s'] && event.key == 'ArrowUp') {//Alas liikuminen ylös ampuminen
+    }else if (keysPressed['ArrowUp'] && keysPressed['s'] || keysPressed['s'] && keysPressed['ArrowUp']) {//Alas liikuminen ylös ampuminen
         moveBlockDown();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "up");
-    }else if (keysPressed['ArrowRight'] && event.key == 'd' || keysPressed['d'] && event.key == 'ArrowRight') {//Liikkuminen oikealle oikealle ampuminen
+    }else if (keysPressed['ArrowRight'] && keysPressed['d'] || keysPressed['d'] && keysPressed['ArrowRight']) {//Liikkuminen oikealle oikealle ampuminen
         moveBlockRight();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "right");
-    }else if (keysPressed['ArrowLeft'] && event.key == 'd' || keysPressed['d'] && event.key == 'ArrowLeft') {//Liikkuminen oikealle vasemmalle ampuminen
+    }else if (keysPressed['ArrowLeft'] && keysPressed['d'] || keysPressed['d'] && keysPressed['ArrowLeft']) {//Liikkuminen oikealle vasemmalle ampuminen
         moveBlockRight();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "left");
-    }else if (keysPressed['ArrowUp'] && event.key == 'd' || keysPressed['d'] && event.key == 'ArrowUp') {//Liikkuminen oikealle ylös ampuminen
+    }else if (keysPressed['ArrowUp'] && keysPressed['d'] || keysPressed['d'] && keysPressed['ArrowUp']) {//Liikkuminen oikealle ylös ampuminen
         moveBlockRight();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "up");
-    }else if (keysPressed['ArrowDown'] && event.key == 'd' || keysPressed['d'] && event.key == 'ArrowDown') {//Liikkuminen oikealle alas ampuminen
+    }else if (keysPressed['ArrowDown'] && keysPressed['d'] || keysPressed['d'] && keysPressed['ArrowDown']) {//Liikkuminen oikealle alas ampuminen
         moveBlockRight();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "down");
-    }else if (keysPressed['ArrowRight'] && event.key == 'a' || keysPressed['a'] && event.key == 'ArrowRight') {//Liikkuminen vasemmale oikealle ampuminen
+    }else if (keysPressed['ArrowRight'] && keysPressed['a'] || keysPressed['a'] && keysPressed['ArrowRight'] ) {//Liikkuminen vasemmale oikealle ampuminen
         moveBlockLeft();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "right");
-    }else if (keysPressed['ArrowLeft'] && event.key == 'a' || keysPressed['a'] && event.key == 'ArrowLeft') {//Liikkuminen vasemmale vasemmalle ampuminen
+    }else if (keysPressed['ArrowLeft'] && keysPressed['a']  || keysPressed['a'] && keysPressed['ArrowLeft'] ) {//Liikkuminen vasemmale vasemmalle ampuminen
         moveBlockLeft();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "left");
-    }else if (keysPressed['ArrowUp'] && event.key == 'a' || keysPressed['a'] && event.key == 'ArrowUp') {//Liikkuminen vasemmale ylös ampuminen
+    }else if (keysPressed['ArrowUp'] && keysPressed['a']  || keysPressed['a'] && keysPressed['ArrowUp'] ) {//Liikkuminen vasemmale ylös ampuminen
         moveBlockLeft();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
             "up");
-    }else if (keysPressed['ArrowDown'] && event.key == 'a' || keysPressed['a'] && event.key == 'ArrowDown') {//Liikkuminen vasemmale alas ampuminen
+    }else if (keysPressed['ArrowDown'] && keysPressed['a']  || keysPressed['a'] && keysPressed['ArrowDown'] ) {//Liikkuminen vasemmale alas ampuminen
         moveBlockLeft();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "down");
+    }else if (keysPressed['w'] && keysPressed['a'] && keysPressed['ArrowRight'] || keysPressed['ArrowRight'] && keysPressed['w'] && keysPressed['a']) {//Ylös diagonalilla vasemmale liikkuminen ja ampuminen
+        moveDioganalyLeftUp();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "right");
+    }else if (keysPressed['w'] && keysPressed['a'] && keysPressed['ArrowLeft'] || keysPressed['ArrowLeft'] && keysPressed['a'] && keysPressed['w']) {
+        moveDioganalyLeftUp();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "left");
+    }else if (keysPressed['w'] && keysPressed['a'] && keysPressed['ArrowUp'] || keysPressed['ArrowUp'] && keysPressed['a'] && keysPressed['w']) {
+        moveDioganalyLeftUp();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "up");
+    }else if (keysPressed['w'] && keysPressed['a'] && keysPressed['ArrowDown'] || keysPressed['ArrowDown'] && keysPressed['a'] && keysPressed['w']) {
+        moveDioganalyLeftUp();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "down");
+    }else if (keysPressed['w'] && keysPressed['d'] && keysPressed['ArrowRight'] || keysPressed['ArrowRight'] && keysPressed['w'] && keysPressed['d']) {//Ylös diagonalilla oikealle liikkuminen ja ampuminen
+        moveDioganalyRightUp();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "right");
+    }else if (keysPressed['w'] && keysPressed['d'] && keysPressed['ArrowLeft'] || keysPressed['ArrowLeft'] && keysPressed['d'] && keysPressed['w']) {
+        moveDioganalyRightUp();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "left");
+    }else if (keysPressed['w'] && keysPressed['d'] && keysPressed['ArrowUp'] || keysPressed['ArrowUp'] && keysPressed['d'] && keysPressed['d']) {
+        moveDioganalyRightUp();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "up");
+    }else if (keysPressed['w'] && keysPressed['d'] && keysPressed['ArrowDown'] || keysPressed['ArrowDown'] && keysPressed['d'] && keysPressed['w']) {
+        moveDioganalyRightUp();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "down");
+    }else if (keysPressed['s'] && keysPressed['a'] && keysPressed['ArrowRight'] || keysPressed['ArrowRight'] && keysPressed['s'] && keysPressed['a']) {//Alas vasemmalle diagonalilla liikkuminen ja ampuminen
+        moveDioganalyLeftDown();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "right");
+    }else if (keysPressed['s'] && keysPressed['a'] && keysPressed['ArrowLeft'] || keysPressed['ArrowLeft'] && keysPressed['s'] && keysPressed['a']) {
+        moveDioganalyLeftDown();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "left");
+    }else if (keysPressed['s'] && keysPressed['a'] && keysPressed['ArrowUp'] || keysPressed['ArrowUp'] && keysPressed['s'] && keysPressed['a']) {
+        moveDioganalyLeftDown();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "up");
+    }else if (keysPressed['w'] && keysPressed['a'] && keysPressed['ArrowDown'] || keysPressed['ArrowDown'] && keysPressed['a'] && keysPressed['a']) {
+        moveDioganalyLeftDown();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "down");
+    }else if (keysPressed['s'] && keysPressed['d'] && keysPressed['ArrowRight'] || keysPressed['ArrowRight'] && keysPressed['s'] && keysPressed['d']) {//Alas oikealle diagonalilla liikkuminen ja ampuminen
+        moveDioganalyRightDown();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "right");
+    }else if (keysPressed['s'] && keysPressed['d'] && keysPressed['ArrowLeft'] || keysPressed['ArrowLeft'] && keysPressed['d'] && keysPressed['s']) {
+        moveDioganalyRightDown();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "left");
+    }else if (keysPressed['s'] && keysPressed['d'] && keysPressed['ArrowUp'] || keysPressed['ArrowUp'] && keysPressed['d'] && keysPressed['s']) {
+        moveDioganalyRightDown();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            "up");
+    }else if (keysPressed['s'] && keysPressed['d'] && keysPressed['ArrowDown'] || keysPressed['ArrowDown'] && keysPressed['d'] && keysPressed['s']) {
+        moveDioganalyRightDown();
         createBullet(
             blockX + playerWidth / 2 - bulletSize / 2, 
             blockY,
