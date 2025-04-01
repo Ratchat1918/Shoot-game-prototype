@@ -9,6 +9,9 @@ context1.font = fontSize + "px Arial";
 var levelHeight = score.height * 0.05;
 let lives = 3;
 
+var saanotImg=new Image();
+saanotImg.src="säänöt.png";
+
 function head() {
     var headTextWidth = context1.measureText("Scoreboard").width;
     var headTextMiddle = (score.width - headTextWidth) / 2;
@@ -26,10 +29,7 @@ function killedEnemies() {
     context1.fillStyle = "black";
     var hitsTextWidth = context1.measureText("Killed enemies: " + hitsInScoreBoard).width;
     var hitsTextMiddle = (score.width - hitsTextWidth) / 2
-    context1.fillText(
-        "Killed enemies: " + hitsInScoreBoard, 
-        hitsTextMiddle, 
-        score.height * 0.18);
+    context1.fillText("Killed enemies: " + hitsInScoreBoard, hitsTextMiddle, score.height * 0.18);
     context1.restore();
 }
 
@@ -162,31 +162,27 @@ function level() {
 }
 
 function checkLives() {
-    
+    console.log(lives + " elämät");
     if (lives === 0) {
-        console.log("Peli päättyi");
         gameOver();
     } else {
         lives -= 1;
-        console.log(lives + " elämät");
-        livesText();
     }
 }
 
 function livesText() {
-    context1.clearRect(0, score.height * 0.68, score.width, score.height * 0.06);
+    context1.clearRect(0, score.height * 0.73, score.width, score.height * 0.75);
+    context1.save();
+    context1.fillStyle = "black";
     let livesTextWidth = context1.measureText("Lives: " + lives).width;
     let livesTextMiddle = (score.width - livesTextWidth) / 2;
-    context1.fillStyle = "black";
-    context1.fillText(
-        "Lives: " + lives, 
-        livesTextMiddle, 
-        score.height * 0.72);
+    context1.fillText("Lives: " + lives, livesTextMiddle, score.height * 0.73);
+    context1.drawImage(saanotImg,livesTextMiddle*0.4, score.height * 0.75,200,200);
+    context1.restore();
 }
 
 head();
 level();
-livesText();
 function refreshScoreBoard() {
     
     killedEnemies();
@@ -196,6 +192,12 @@ function refreshScoreBoard() {
     level3();
     level2();
     level1();
+    livesText();
+
+    requestAnimationFrame(refreshScoreBoard);
+}
+
+refreshScoreBoard();
     
     requestAnimationFrame(refreshScoreBoard);
 }
