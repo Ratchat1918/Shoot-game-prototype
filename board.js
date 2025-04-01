@@ -198,8 +198,3 @@ function refreshScoreBoard() {
 }
 
 refreshScoreBoard();
-    
-    requestAnimationFrame(refreshScoreBoard);
-}
-
-refreshScoreBoard();
