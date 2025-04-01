@@ -601,7 +601,7 @@ function refreshAll() {
 }
 
 refreshAll();
-setInterval(createEnemies, enemiesSecBetw);  /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
+//setInterval(createEnemies, enemiesSecBetw);  /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
 function updateInterval() {              
     clearInterval(intervalId);              /**KUN 10 OSUMAA VIHOLLISIA NOPEAMMIN */
     intervalId = setInterval(createEnemies, enemiesSecBetw);

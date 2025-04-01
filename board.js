@@ -165,7 +165,7 @@ function checkLives() {
     
     if (lives === 0) {
         console.log("Peli päättyi");
-        //gameOver();
+        gameOver();
     } else {
         lives -= 1;
         console.log(lives + " elämät");
