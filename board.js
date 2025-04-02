@@ -174,7 +174,7 @@ function livesText() {          /**UPDATES LIVES TEXT */
     let livesTextWidth = context1.measureText("Lives: " + lives).width;
     let livesTextMiddle = (score.width - livesTextWidth) / 2;
     context1.fillText("Lives: " + lives, livesTextMiddle, score.height * 0.73);
-    context1.drawImage(saanotImg,livesTextMiddle*0.4, score.height * 0.75,200,200);
+    //context1.drawImage(saanotImg,livesTextMiddle*0.4, score.height * 0.75,200,200);
     context1.restore();
 }
 
