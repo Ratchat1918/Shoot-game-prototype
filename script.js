@@ -3,6 +3,8 @@ var context = canvas.getContext('2d');
 canvas.width = window.innerWidth * 0.75;
 canvas.height = window.innerHeight;
 
+let gameActive = true;
+
 let isGamePaused=false;
 
 var playerWidth = canvas.width * 0.05;
@@ -294,9 +296,11 @@ function checkHit(bullet, enemy) {              /*TARKISTAA OSUMAN VIHOLLISEEN*/
 }
 
 function gameOver() {       /**ILMOITUS PELIN PÄÄTTYMISESTÄ */
-    alert("Osuma, peli päättyi");
-    let restart = confirm("Haluatko pelata uudestaan?");
-
+    gameActive = false;
+    context.save();
+    context.fillStyle = "rgba(255, 192, 203, 0.5)";
+    context.fillRect(canvas.width / 4, canvas.height / 4, canvas.width / 2, canvas.height / 2);
+    context.reload();    
     if (restart) {
         resetGame();
         location.reload();
@@ -505,8 +509,15 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key];
 });
-enemyHoles();
+function handleUserInput(event) {
+    if (!gameActive) {
+        return;
+    }
+}
 function refreshAll() {
+    if (!gameActive) {
+        return;
+    }
     context.clearRect(0, 0, canvas.width, canvas.height);   /*TYHJENTÄÄ KANVAKSEN*/
     moveBlockDown();
     moveBlockLeft();                           /*NÄMÄ FUNKTIOT LUO UUDELLEEN OBJEKTIT*/
@@ -522,7 +533,10 @@ function refreshAll() {
 }
 
 refreshAll();
-setInterval(createEnemies, enemiesSecBetw);  /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
+
+function startGame() {
+    setInterval(createEnemies, enemiesSecBetw);  /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
+}
 function updateInterval() {              
     clearInterval(intervalId);              /**KUN 10 OSUMAA VIHOLLISIA NOPEAMMIN */
     intervalId = setInterval(createEnemies, enemiesSecBetw);
