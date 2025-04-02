@@ -207,9 +207,9 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
         if (checkCollision(player, enemy)) {    /**OSUMAN TARKISTUS VIHOLLINEN <--> PELAAAJA */
             console.log("Osuma");
             checkLives();
-            if (lives > 0) {
+            /*if (lives > 0) {
                 removeEnemy(index);
-            }
+            }*/
         }
 
         if (enemy.x <= 0 || enemy.x + enemy.enemySize >= canvas.width) {
@@ -221,10 +221,10 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
     });
 }
 
-function removeEnemy(index) {
+/*function removeEnemy(index) {
     enemies.splice(index, 1);
     console.log("Vihollinen poistettu");
-}
+}*/
 
 function createBullet(x, y, direction) {        /*LUO AMMUKSEN*/
     bullets.push({ x: x, y: y, direction: direction});
