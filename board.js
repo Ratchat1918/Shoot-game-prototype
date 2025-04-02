@@ -26,10 +26,7 @@ function killedEnemies() {      /**UPDATES KILLED ENEMIES COUNTER */
     context1.fillStyle = "black";
     var hitsTextWidth = context1.measureText("Killed enemies: " + hitsInScoreBoard).width;
     var hitsTextMiddle = (score.width - hitsTextWidth) / 2
-    context1.fillText(
-        "Killed enemies: " + hitsInScoreBoard, 
-        hitsTextMiddle, 
-        score.height * 0.18);
+    context1.fillText("Killed enemies: " + hitsInScoreBoard, hitsTextMiddle, score.height * 0.18);
     context1.restore();
 }
 
@@ -164,7 +161,6 @@ function level() {              /**GAME LEVEL TEXT */
 function checkLives() {            /**CHECK LIVES */
     
     if (lives === 0) {
-        console.log("Peli päättyi");
         gameOver();
     } else {
         lives -= 1;
@@ -177,16 +173,13 @@ function livesText() {          /**UPDATES LIVES TEXT */
     context1.clearRect(0, score.height * 0.68, score.width, score.height * 0.06);
     let livesTextWidth = context1.measureText("Lives: " + lives).width;
     let livesTextMiddle = (score.width - livesTextWidth) / 2;
-    context1.fillStyle = "black";
-    context1.fillText(
-        "Lives: " + lives, 
-        livesTextMiddle, 
-        score.height * 0.72);
+    context1.fillText("Lives: " + lives, livesTextMiddle, score.height * 0.73);
+    context1.drawImage(saanotImg,livesTextMiddle*0.4, score.height * 0.75,200,200);
+    context1.restore();
 }
 
 head();
 level();
-livesText();
 function refreshScoreBoard() {
     
     killedEnemies();
@@ -196,7 +189,8 @@ function refreshScoreBoard() {
     level3();
     level2();
     level1();
-    
+    livesText();
+
     requestAnimationFrame(refreshScoreBoard);
 }
 
