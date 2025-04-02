@@ -9,18 +9,18 @@ context1.font = fontSize + "px Arial";
 var levelHeight = score.height * 0.05;
 let lives = 3;
 
-function head() {
+function head() {           /**SCOREBOARD HEAD */
     var headTextWidth = context1.measureText("Scoreboard").width;
     var headTextMiddle = (score.width - headTextWidth) / 2;
     context1.fillText("Scoreboard", headTextMiddle, score.height * 0.08);
 }
 
-function ScoreBoardHits() {
+function ScoreBoardHits() {     /**COUNTS ENEMY HITS */
     hitsInScoreBoard += 1;
     killedEnemies();
 }
 
-function killedEnemies() {
+function killedEnemies() {      /**UPDATES KILLED ENEMIES COUNTER */
     context1.clearRect(0, 100, score.width, 200);
     context1.save();
     context1.fillStyle = "black";
@@ -33,7 +33,7 @@ function killedEnemies() {
     context1.restore();
 }
 
-function level6() {
+function level6() {              /**GAME DIFFICULTY LEVEL 6 */
     var level6Width = score.width * 0.90;
     context1.save();
     if (hitsInScoreBoard > 49) {
@@ -53,7 +53,7 @@ function level6() {
     context1.restore();
 }
 
-function level5() {
+function level5() {             /**GAME DIFFICULTY LEVEL 5 */ 
     var level5Width = score.width * 0.75;
     context1.save();
     if (hitsInScoreBoard > 39) {
@@ -73,7 +73,7 @@ function level5() {
     context1.restore();
 }
 
-function level4() {
+function level4() {             /**GAME DIFFICULTY LEVEL 4 */
     var level4Width = score.width * 0.60;
     context1.save();
     if (hitsInScoreBoard > 29) {
@@ -93,7 +93,7 @@ function level4() {
     context1.restore();
 }
 
-function level3() {
+function level3() {             /**GAME DIFFICULTY LEVEL 3 */
     var level3Width = score.width * 0.45;
     context1.save();
     if (hitsInScoreBoard > 19) {
@@ -113,7 +113,7 @@ function level3() {
     context1.restore();
 }
 
-function level2() {
+function level2() {             /**GAME DIFFICULTY LEVEL 2 */
     var level2Width = score.width * 0.30;
     context1.save();
     if (hitsInScoreBoard > 9) {
@@ -134,7 +134,7 @@ function level2() {
     context1.restore();
 }
 
-function level1() {
+function level1() {             /**GAME DIFFICULTY LEVEL 1 */
     var level1Width = score.width * 0.15;
     context1.save();
     if (hitsInScoreBoard > 0) {
@@ -155,25 +155,25 @@ function level1() {
     context1.restore();
 }
 
-function level() {
+function level() {              /**GAME LEVEL TEXT */
     var levelTextWidth = context1.measureText("Game level").width;
     var levelTextMiddle = (score.width - levelTextWidth) / 2;
     context1.fillText("Game level", levelTextMiddle, score.height * 0.63); 
 }
 
-function checkLives() {
+function checkLives() {            /**CHECK LIVES */
     
     if (lives === 0) {
         console.log("Peli päättyi");
         gameOver();
     } else {
         lives -= 1;
-        console.log(lives + " elämät");
+        console.log(lives + " elämää jäljellä");
         livesText();
     }
 }
 
-function livesText() {
+function livesText() {          /**UPDATES LIVES TEXT */
     context1.clearRect(0, score.height * 0.68, score.width, score.height * 0.06);
     let livesTextWidth = context1.measureText("Lives: " + lives).width;
     let livesTextMiddle = (score.width - livesTextWidth) / 2;

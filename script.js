@@ -205,8 +205,11 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
         enemy.y += enemy.directionY * enemySpeed / 10;
 
         if (checkCollision(player, enemy)) {    /**OSUMAN TARKISTUS VIHOLLINEN <--> PELAAAJA */
-            console.log("OSuma");
+            console.log("Osuma");
             checkLives();
+            if (lives > 0) {
+                removeEnemy(index);
+            }
         }
 
         if (enemy.x <= 0 || enemy.x + enemy.enemySize >= canvas.width) {
@@ -216,6 +219,11 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
             enemy.directionY *= -1;         /*VIHOLLINEN KIMPOAAA SEINÄSTÄ*/
         }
     });
+}
+
+function removeEnemy(index) {
+    enemies.splice(index, 1);
+    console.log("Vihollinen poistettu");
 }
 
 function createBullet(x, y, direction) {        /*LUO AMMUKSEN*/
@@ -286,7 +294,6 @@ function checkHit(bullet, enemy) {              /*TARKISTAA OSUMAN VIHOLLISEEN*/
 }
 
 function gameOver() {       /**ILMOITUS PELIN PÄÄTTYMISESTÄ */
-    console.log("Peli päättyi");
     alert("Osuma, peli päättyi");
     let restart = confirm("Haluatko pelata uudestaan?");
 
@@ -601,7 +608,7 @@ function refreshAll() {
 }
 
 refreshAll();
-//setInterval(createEnemies, enemiesSecBetw);  /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
+setInterval(createEnemies, enemiesSecBetw);  /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
 function updateInterval() {              
     clearInterval(intervalId);              /**KUN 10 OSUMAA VIHOLLISIA NOPEAMMIN */
     intervalId = setInterval(createEnemies, enemiesSecBetw);
