@@ -39,6 +39,9 @@ var player = {
     height: 50
 };
 
+var fontSize = Math.floor(canvas.width * 0.08);
+context.font = fontSize + "px Arial";
+
 console.log(`Pelaajan sijaitsi X:${blockX}, Y:${blockY}`);
 
 let playerImg = new Image();
@@ -207,7 +210,6 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
         enemy.y += enemy.directionY * enemySpeed / 10;
 
         if (checkCollision(player, enemy)) {    /**OSUMAN TARKISTUS VIHOLLINEN <--> PELAAAJA */
-            console.log("Osuma");
             checkLives();
             if (lives > 0) {
                 removeEnemy(index);
@@ -225,7 +227,6 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
 
 function removeEnemy(index) {
     enemies.splice(index, 1);
-    console.log("Vihollinen poistettu");
 }
 
 function createBullet(x, y, direction) {        /*LUO AMMUKSEN*/
@@ -297,25 +298,63 @@ function checkHit(bullet, enemy) {              /*TARKISTAA OSUMAN VIHOLLISEEN*/
 
 function gameOver() {       /**ILMOITUS PELIN PÄÄTTYMISESTÄ */
     gameActive = false;
-    context.save();
+    let overWindowWidth = canvas.width / 2;
+    let overWindowHeight = canvas.height / 2;
+    let overWindowX = canvas.width / 4;
+    let overWindowY = canvas.height / 4;
+
     context.fillStyle = "rgba(255, 192, 203, 0.5)";
-    context.fillRect(canvas.width / 4, canvas.height / 4, canvas.width / 2, canvas.height / 2);
-    context.reload();    
-    if (restart) {
-        resetGame();
-        location.reload();
-    } else {
-        alert("Kiitos pelaamisesta!");
-    }
+    context.fillRect(overWindowX, overWindowY, overWindowWidth, overWindowHeight);
+
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillStyle = "red";
+
+    context.fillText(
+        "Game over", 
+        overWindowX + overWindowWidth / 2, 
+        overWindowY + overWindowHeight / 2 -80);
     
+    let playAgainWidth = overWindowWidth * 0.8;
+    let playAgainHeight = overWindowHeight * 0.3;
+    let playAgainX = overWindowX + overWindowWidth / 2 - playAgainWidth / 2;
+    let playAgainY = overWindowY + overWindowHeight / 2 + 40;
+    context.fillStyle = "rgb(58, 167, 8)";
+    context.fillRect(playAgainX, playAgainY, playAgainWidth, playAgainHeight);
+
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillStyle = "rgb(240, 195, 97)";
+
+    context.fillText(
+        "Play again",
+        playAgainX + playAgainWidth / 2,
+        playAgainY + playAgainHeight / 2);
+
+    canvas.addEventListener("click", (event) => {
+        let rect1 = canvas.getBoundingClientRect();
+        let mouseX1 = event.clientX - rect1.left
+        let mouseY1 = event.clientY - rect1.top;
+        if (
+            mouseX1 >= playAgainX &&
+            mouseX1 <= playAgainX + playAgainWidth &&
+            mouseY1 >= playAgainY &&
+            mouseY1 <= playAgainY + playAgainHeight
+        ) {
+            
+            location.reload();
+        }
+    })
 }
 
 function resetGame() {         /**ALUSTAA ALKUPERÄISET ARVOT JOS PELATAAN UUDESTAAN */
     blockX = window.innerWidth / 2 -25;
     blockY = window.innerHeight / 2 -25;
+    gameActive = true;
     enemies = [];
     bullets = [];
     enemiesSecBetw = 3000;
+    enemySpeed = 20;
     countHits = 0;
     player = {
         x: blockX,
@@ -326,6 +365,7 @@ function resetGame() {         /**ALUSTAA ALKUPERÄISET ARVOT JOS PELATAAN UUDES
     playerImg.onload = function() {
         context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
     };
+    
 
 }
 
@@ -335,9 +375,9 @@ function PauseGame(){
         isGamePaused=false;
     }
 }
-document.addEventListener("visibilitychange", () => {
+/*document.addEventListener("visibilitychange", () => {
     window.alert("PAUSE\nPress ok or escape to continue");
-  });
+  });*/
 
 document.addEventListener("keydown", function (keyInput) {//Ampumine ja liikkuminen erilaisena aikana
     switch (keyInput.code) {
@@ -385,6 +425,7 @@ document.addEventListener("keydown", function (keyInput) {//Ampumine ja liikkumi
             break
     }
 });
+
 
 //ampuminen ja liikuminen samana aikana
 let keysPressed = {};
@@ -506,30 +547,28 @@ document.addEventListener('keydown', (event) => {
         handleMovementDirection("rightDown","down");
     }
 });
+
 document.addEventListener('keyup', (event) => {
     delete keysPressed[event.key];
 });
-function handleUserInput(event) {
-    if (!gameActive) {
-        return;
-    }
-}
+
+
 function refreshAll() {
-    if (!gameActive) {
-        return;
+    if (gameActive) {
+        context.clearRect(0, 0, canvas.width, canvas.height);   /*TYHJENTÄÄ KANVAKSEN*/
+        moveBlockDown();
+        moveBlockLeft();                           /*NÄMÄ FUNKTIOT LUO UUDELLEEN OBJEKTIT*/
+        moveBlockRight();
+        moveBlockUp();
+        drawEnemies();
+        moveEnemies();
+        drawBullets();
+        refreshBullets();
+        enemyHoles();
+        PauseGame();
+        requestAnimationFrame(refreshAll);
     }
-    context.clearRect(0, 0, canvas.width, canvas.height);   /*TYHJENTÄÄ KANVAKSEN*/
-    moveBlockDown();
-    moveBlockLeft();                           /*NÄMÄ FUNKTIOT LUO UUDELLEEN OBJEKTIT*/
-    moveBlockRight();
-    moveBlockUp();
-    drawEnemies();
-    moveEnemies();
-    drawBullets();
-    refreshBullets();
-    enemyHoles();
-    PauseGame();
-    requestAnimationFrame(refreshAll);
+    
 }
 
 refreshAll();

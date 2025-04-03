@@ -193,7 +193,7 @@ function startGameButton() {    /**CREATES START GAME BUTTON */
     context1.fillStyle = "black";
     
     context1.fillText(
-        "Start Game", buttonX + buttonWidth / 2, 
+        "Start game", buttonX + buttonWidth / 2, 
         buttonY + buttonHeight / 2);
 
         context1.textAlign = "start";
