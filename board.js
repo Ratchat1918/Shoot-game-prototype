@@ -9,6 +9,13 @@ context1.font = fontSize + "px Arial";
 var levelHeight = score.height * 0.05;
 let lives = 3;
 
+let instructionImg = new Image();
+instructionImg.src = "ohjeet.png";
+
+instructionImg.onload = function() {
+    instructions();
+}
+
 function head() {           /**SCOREBOARD HEAD */
     var headTextWidth = context1.measureText("Scoreboard").width;
     var headTextMiddle = (score.width - headTextWidth) / 2;
@@ -175,7 +182,6 @@ function livesText() {          /**UPDATES LIVES TEXT */
     let livesTextMiddle = (score.width - livesTextWidth) / 2;
     context1.fillStyle = "black";
     context1.fillText("Lives: " + lives, livesTextMiddle, score.height * 0.73);
-    //context1.drawImage(saanotImg,livesTextMiddle*0.4, score.height * 0.75,200,200);
     context1.restore();
 }
 
@@ -239,9 +245,19 @@ function startGameButton() {    /**CREATES START GAME BUTTON */
     });
 }
 
+function instructions() {
+    let instructionWidth = score.width * 0.9;
+    let instructionHeight = score.height * 0.1;
+    let instructorX = (score.width - instructionWidth) / 2;
+    let instructorY = score.height * 0.9;
+
+    context1.drawImage(instructionImg, instructorX, instructorY, instructionWidth, instructionHeight);
+}
+
 head();
 level();
 startGameButton();
+instructions();
 function refreshScoreBoard() {
     
     killedEnemies();
