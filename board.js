@@ -249,7 +249,7 @@ function instructions() {
     let instructionWidth = score.width * 0.9;
     let instructionHeight = score.height * 0.1;
     let instructorX = (score.width - instructionWidth) / 2;
-    let instructorY = score.height * 0.9;
+    let instructorY = score.height * 0.89;
 
     context1.drawImage(instructionImg, instructorX, instructorY, instructionWidth, instructionHeight);
 }
