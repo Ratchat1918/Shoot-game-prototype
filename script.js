@@ -30,7 +30,11 @@ let bulletSize = canvas.width * 0.007;
 let bulletSpeed = 20;
 let bullets = [];
 
-var shotSound=document.getElementById("myAudio");
+var shotSound= new Audio('shotSound.mp3');
+shotSound.playbackRate=3;
+
+var hitSound=new Audio('hit.mp3');
+
 
 var player = {
     x: blockX,
@@ -226,12 +230,12 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
 }
 
 function removeEnemy(index) {
+    hitSound.play();
     enemies.splice(index, 1);
 }
 
 function createBullet(x, y, direction) {        /*LUO AMMUKSEN*/
     bullets.push({ x: x, y: y, direction: direction});
-    shotSound.play();
 }
 
 function drawBullets() {                        /*PIIRTÄÄ AMMUKSEN*/
@@ -380,6 +384,13 @@ function PauseGame(){
   });*/
 
 document.addEventListener("keydown", function (keyInput) {//Ampumine ja liikkuminen erilaisena aikana
+    function shootdIRECTION(direction){
+        shotSound.play();
+        createBullet(
+            blockX + playerWidth / 2 - bulletSize / 2, 
+            blockY,
+            direction);
+    }
     switch (keyInput.code) {
         case 'KeyD':
             moveBlockRight();
@@ -394,31 +405,16 @@ document.addEventListener("keydown", function (keyInput) {//Ampumine ja liikkumi
             moveBlockDown();
             break;
         case "ArrowUp":
-            createBullet(
-                blockX + playerWidth / 2 - bulletSize / 2, 
-                blockY,
-                "up");
+            shootdIRECTION("up");
             break;
         case "ArrowDown":
-            createBullet(
-                blockX + playerWidth / 2 - bulletSize / 2,
-                blockY + playerWidth,
-                "down"
-                );
+            shootdIRECTION("down");
             break;
         case "ArrowLeft":
-            createBullet(
-                blockX, 
-                blockY + playerWidth / 2 - bulletSize / 2,
-                "left"
-            );
+            shootdIRECTION("left");
             break;
         case "ArrowRight":
-            createBullet(
-                blockX + playerWidth,
-                blockY + playerWidth / 2 - bulletSize / 2,
-                "right"
-            );
+            shootdIRECTION("right");
             break;
         case "Escape":
             isGamePaused=true;
