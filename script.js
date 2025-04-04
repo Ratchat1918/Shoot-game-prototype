@@ -85,7 +85,7 @@ function moveBlockUp() {
 function moveBlockDown() {
     context.clearRect(blockX, blockY, playerWidth, playerWidth);
     blockY += block_dy;
-    let borderDown = canvas.height - 100;
+    let borderDown = canvas.height - playerWidth/2;
     if (blockY >= borderDown) {
         blockY = borderDown;
     }
