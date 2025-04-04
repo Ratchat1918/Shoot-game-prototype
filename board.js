@@ -201,6 +201,31 @@ function startGameButton() {    /**CREATES START GAME BUTTON */
     
     score.addEventListener("click", (event) => {    /**GAME STARTS EVENT */
         let rect = score.getBoundingClientRect();
+        context1.fillStyle = "red";
+        context1.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+        context1.textAlign = "center";
+        context1.textBaseline = "middle";
+        context1.fillStyle = "black";
+        context1.fillText(
+            "Start game", buttonX + buttonWidth / 2, 
+            buttonY + buttonHeight / 2);
+    
+            context1.textAlign = "start";
+            context1.textBaseline = "alphabetic";
+        setTimeout(()=>ChangeStartBtnBack(),1000);
+        function ChangeStartBtnBack(){
+            context1.fillStyle = "orange"
+            context1.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+            context1.textAlign = "center";
+            context1.textBaseline = "middle";
+            context1.fillStyle = "black";
+            context1.fillText(
+                "Start game", buttonX + buttonWidth / 2, 
+                buttonY + buttonHeight / 2);
+        
+                context1.textAlign = "start";
+                context1.textBaseline = "alphabetic";
+        }
         let mouseX = event.clientX - rect.left;
         let mouseY = event.clientY - rect.top;
         if (
@@ -232,3 +257,4 @@ function refreshScoreBoard() {
 }
 
 refreshScoreBoard();
+
