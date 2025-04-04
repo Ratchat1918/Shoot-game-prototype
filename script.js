@@ -46,8 +46,6 @@ var player = {
 var fontSize = Math.floor(canvas.width * 0.08);
 context.font = fontSize + "px Arial";
 
-console.log(`Pelaajan sijaitsi X:${blockX}, Y:${blockY}`);
-
 let playerImg = new Image();
 playerImg.src = "spaceship.png";
 
@@ -133,53 +131,53 @@ function moveDioganalyLeftDown() {
     context.drawImage(playerImg, blockX, blockY, playerWidth, playerWidth);
 }
 
-function enemyHoles() {        /*LUO AUKOT JOISTA VIHOLLISET TULEE*/
+function enemyHoles() {        /*CREATES HOLES WHERE ENEMIES SHOW UP*/
     holeUp();
     holeDown();
     holeLeft();
     holeRight();
 }
 
-function holeUp() {             /*AUKKO YLÖS*/
+function holeUp() {             /*HOLE UP*/
     context.fillStyle = "red";
     context.fillRect(holeX, 0, holeXwidth, holeDepth);
 }
 
-function holeDown() {           /*AUKKO ALAS*/
+function holeDown() {           /*HOLE DOWN*/
     context.fillStyle = "red";
     context.fillRect(holeX, canvas.height - holeDepth, holeXwidth, holeDepth);
 }
 
-function holeLeft() {           /*AUKKO VASEMALLE*/
+function holeLeft() {           /*HOLE LEFT*/
     context.fillStyle = "red";
     context.fillRect(0, holeY, holeDepth, holeYheight);
 }
 
-function holeRight() {          /*AUKKO OIKEALLE*/
+function holeRight() {          /*HOLE RIGHT*/
     context.fillStyle = "red";
     context.fillRect(canvas.width - holeDepth, holeY, holeDepth, holeYheight);
 }
 
-function createEnemies() {          /*LUO VIHOLLISET SATTUMANVARAISESTI ERI AUKOISTA*/
+function createEnemies() {          /*CREATES ENEMIES RANDOMLY FROM 4 DIFFERENT HOLES*/
     var hole = Math.floor(Math.random() * 4);
     var x, y, directionX, directionY;
 
-    if (hole === 0) {         /* 0 = YLHÄÄLTÄ */
+    if (hole === 0) {         /* 0 = UP */
         x = holeX + Math.random() * holeXwidth;
         y = 0;
         directionX = (Math.random() - 0.5) * 2;
         directionY = 2;
-    } else if (hole === 1) {  /* 1 = ALHAALTA */
+    } else if (hole === 1) {  /* 1 = DOWN */
         x = holeX + Math.random() * holeXwidth;
         y = canvas.height - enemySize;
         directionX = (Math.random() - 0.5) * 2;
         directionY = -2;
-    } else if (hole === 2) {  /* 2 = VASEMMALTA */
+    } else if (hole === 2) {  /* 2 = LEFT */
         x = 0;
         y = holeY + Math.random() * holeYheight;
         directionX = 2;
         directionY = (Math.random() - 0.5) * 2;
-    } else if (hole === 3) {  /* 3 = OIKEALTA */
+    } else if (hole === 3) {  /* 3 = RIGHT */
         x = canvas.width - enemySize;
         y = holeY + Math.random() * holeYheight;
         directionX = -2;
@@ -188,7 +186,7 @@ function createEnemies() {          /*LUO VIHOLLISET SATTUMANVARAISESTI ERI AUKO
     enemies.push({x, y, directionX, directionY, enemySize});
     
 }
-function drawEnemies() {                /*PIIRTÄÄ VIHOLLISET*/
+function drawEnemies() {                /*DRAW ENEMIES*/
     context.fillStyle = "yellow";
     enemies.forEach(enemy => {
         context.drawImage(
@@ -201,19 +199,19 @@ function drawEnemies() {                /*PIIRTÄÄ VIHOLLISET*/
     });
 }
 
-function checkCollision(player, enemy) {      /*TARKISTAA OSUUKO VIHOLLINEN PELAAJAAN*/
-    return blockX < enemy.x + enemy.enemySize - 15 &&    /**VASEMMALTA? HYVÄ OSUMA */
-            blockX + player.width - 5 > enemy.x &&      /**OIKEALTA? HYVÄ OSUMA */
-            blockY < enemy.y + enemy.enemySize - 20 &&   /**YLHÄÄLTÄ? SLÄK */
-            blockY + player.height - 5 > enemy.y;       /**ALHAALTA? HYVÄ OSUMA */
+function checkCollision(player, enemy) {      /*CHECKS IF PLAYER HITS ENEMY*/
+    return blockX < enemy.x + enemy.enemySize - 15 &&
+            blockX + player.width - 5 > enemy.x &&
+            blockY < enemy.y + enemy.enemySize - 20 &&
+            blockY + player.height - 5 > enemy.y;
 }
 
-function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
+function moveEnemies() {                /*MOVING ENEMIES*/
     enemies.forEach((enemy, index) => {
         enemy.x += enemy.directionX * enemySpeed / 10;
         enemy.y += enemy.directionY * enemySpeed / 10;
 
-        if (checkCollision(player, enemy)) {    /**OSUMAN TARKISTUS VIHOLLINEN <--> PELAAAJA */
+        if (checkCollision(player, enemy)) {
             checkLives();
             if (lives > 0) {
                 removeEnemy(index);
@@ -221,24 +219,24 @@ function moveEnemies() {                /*LIIKUTTAA VIHOLLISIA*/
         }
 
         if (enemy.x <= 0 || enemy.x + enemy.enemySize >= canvas.width) {
-            enemy.directionX *= -1;         /*VIHOLLINEN KIMPOAAA SEINÄSTÄ*/
+            enemy.directionX *= -1;         /*ENEMY BOUNCES FROM WALL*/
         }                                   
         if (enemy.y <= 0 || enemy.y + enemy.enemySize >= canvas.height) {
-            enemy.directionY *= -1;         /*VIHOLLINEN KIMPOAAA SEINÄSTÄ*/
+            enemy.directionY *= -1;
         }
     });
 }
 
-function removeEnemy(index) {
-    hitSound.play();
+function removeEnemy(index) {               /**IF PLAYER HAS LIVES LEFT AND COLLISION WITH ENEMY */
+    hitSound.play();                        /**ENEMY JUST DISSAPEARS */
     enemies.splice(index, 1);
 }
 
-function createBullet(x, y, direction) {        /*LUO AMMUKSEN*/
+function createBullet(x, y, direction) {        /*CREATES BULLETS*/
     bullets.push({ x: x, y: y, direction: direction});
 }
 
-function drawBullets() {                        /*PIIRTÄÄ AMMUKSEN*/
+function drawBullets() {                        /*DRAW BULLETS*/
     context.fillStyle = "red";
     for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
@@ -246,7 +244,7 @@ function drawBullets() {                        /*PIIRTÄÄ AMMUKSEN*/
     }
 }
 
-function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
+function refreshBullets() {                 /*REFRESH BULLETS*/
     for (var i = 0; i < bullets.length; i++) {
         var bullet = bullets[i];
 
@@ -262,13 +260,13 @@ function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
 
         for (var j = 0; j < enemies.length; j++) {
             var enemy = enemies[j];
-            if (checkHit(bullet, enemy)) {  /*JOS OSUMA, POISTAA AMMUKSEN JA VIHOLLISEN*/
+            if (checkHit(bullet, enemy)) {  /*IF BULLET HITS ENEMY --> BOTH DISSAPERS*/
                 enemies.splice(j, 1);
                 bullets.splice(i, 1);
                 i--;
                 countHits += 1;
                 ScoreBoardHits();
-                if (countHits === 10) {     /**10 OSUMAN VÄLEIN VIHOLLISIA TULEE NOPEAMMIN */
+                if (countHits === 10) {     /**AFTER EVERY 10TH HIT ENEMIES WILL SHOW UP QUICKER */
                     if (enemiesSecBetw > 500) {
                         enemiesSecBetw -= 500;
                     }
@@ -279,7 +277,7 @@ function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
             }
         }
 
-        if (bullet.x < 0 || 
+        if (bullet.x < 0 ||             /**DELETES BULLET IF GOES BEYOND SCREEN */
             bullet.x > canvas.width || 
             bullet.y < 0 || 
             bullet.y > canvas.height
@@ -291,7 +289,7 @@ function refreshBullets() {                 /*PÄIVITTÄÄ AMMUKSEN*/
     }
 }
 
-function checkHit(bullet, enemy) {              /*TARKISTAA OSUMAN VIHOLLISEEN*/
+function checkHit(bullet, enemy) {              /*CHECKS BULLET HIT WITH ENEMY*/
     return (
         bullet.x < enemy.x + enemy.enemySize &&
         bullet.x + bulletSize > enemy.x &&
@@ -300,7 +298,7 @@ function checkHit(bullet, enemy) {              /*TARKISTAA OSUMAN VIHOLLISEEN*/
     );
 }
 
-function gameOver() {       /**ILMOITUS PELIN PÄÄTTYMISESTÄ */
+function gameOver() {       /** GAME OVER NOTIFICATION */
     gameActive = false;
     let overWindowWidth = canvas.width / 2;
     let overWindowHeight = canvas.height / 2;
@@ -351,7 +349,7 @@ function gameOver() {       /**ILMOITUS PELIN PÄÄTTYMISESTÄ */
     })
 }
 
-function resetGame() {         /**ALUSTAA ALKUPERÄISET ARVOT JOS PELATAAN UUDESTAAN */
+function resetGame() {         /**INITIALIZES ORIGINAL VALUES */
     blockX = window.innerWidth / 2 -25;
     blockY = window.innerHeight / 2 -25;
     gameActive = true;
@@ -379,9 +377,6 @@ function PauseGame(){
         isGamePaused=false;
     }
 }
-/*document.addEventListener("visibilitychange", () => {
-    window.alert("PAUSE\nPress ok or escape to continue");
-  });*/
 
 document.addEventListener("keydown", function (keyInput) {//Ampumine ja liikkuminen erilaisena aikana
     function shootdIRECTION(direction){
@@ -551,9 +546,9 @@ document.addEventListener('keyup', (event) => {
 
 function refreshAll() {
     if (gameActive) {
-        context.clearRect(0, 0, canvas.width, canvas.height);   /*TYHJENTÄÄ KANVAKSEN*/
+        context.clearRect(0, 0, canvas.width, canvas.height);   /*CLEARES CANVAS*/
         moveBlockDown();
-        moveBlockLeft();                           /*NÄMÄ FUNKTIOT LUO UUDELLEEN OBJEKTIT*/
+        moveBlockLeft();                           /*CREATES OBJECTS AND VALUES AGAIN*/
         moveBlockRight();
         moveBlockUp();
         drawEnemies();
@@ -570,9 +565,9 @@ function refreshAll() {
 refreshAll();
 
 function startGame() {
-    setInterval(createEnemies, enemiesSecBetw);  /*LÄHETTÄÄ VIHOLLISIA 3 SEKUNNIN VÄLEIN*/
+    setInterval(createEnemies, enemiesSecBetw);  /*SENDS ENEMIES BETWEEN 3 SEC AT BEGINNING OF THE GAME*/
 }
 function updateInterval() {              
-    clearInterval(intervalId);              /**KUN 10 OSUMAA VIHOLLISIA NOPEAMMIN */
+    clearInterval(intervalId);              /**AFTER EVERY 10TH HIT, ENEMIES SHOW QUICKER */
     intervalId = setInterval(createEnemies, enemiesSecBetw);
 }

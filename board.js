@@ -245,7 +245,7 @@ function startGameButton() {    /**CREATES START GAME BUTTON */
     });
 }
 
-function instructions() {
+function instructions() {                       /**INSTRUCTION HOW TO MOVE PLAYER ANF FIRE */
     let instructionWidth = score.width * 0.9;
     let instructionHeight = score.height * 0.1;
     let instructorX = (score.width - instructionWidth) / 2;
